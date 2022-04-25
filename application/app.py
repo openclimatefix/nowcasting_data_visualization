@@ -1,4 +1,5 @@
 from dash import Dash, html, dcc
+import dash_bootstrap_components as dbc
 import pandas as pd
 import geopandas as gpd
 import json
@@ -7,15 +8,18 @@ import plotly.graph_objects as go
 from datetime import datetime, timezone
 from typing import List
 
-from dash.dependencies import Input, Output
+import logging
+
+from dash.dependencies import Input, Output, State
 from nowcasting_datamodel.models import Forecast, GSPYield, ManyForecasts, ForecastValue
 
+logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 
 URL = "http://nowcasting-api-development.eu-west-1.elasticbeanstalk.com"
 
-app = Dash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets +[dbc.themes.BOOTSTRAP] )
 
 
 def make_pv_plot():
@@ -27,35 +31,41 @@ def make_pv_plot():
     return fig
 
 
-def make_plot(gsp_id: int = 0, show_yesterday:bool = True):
+def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
     print(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
-    print('API request: day after')
+    print("API request: day after")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
     r = response.json()
     gsp_truths_day_after = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
 
-    print('API request: in day')
+    print("API request: in day")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=in-day")
     r = response.json()
     gsp_truths_in_day = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
 
-    print(f'API request: forecast {gsp_id=}')
+    print(f"API request: forecast {gsp_id=}")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/forecast/latest/{gsp_id}")
     r = response.json()
     forecast = pd.DataFrame([ForecastValue(**i).__dict__ for i in r])
 
     if not show_yesterday:
-        print('Only showing todays results')
+        print("Only showing todays results")
         today_start_datetime = datetime.now(timezone.utc)
-        today_start_datetime = today_start_datetime.replace(hour=-0,minute=0,second=0,microsecond=0)
+        today_start_datetime = today_start_datetime.replace(
+            hour=-0, minute=0, second=0, microsecond=0
+        )
 
-        forecast = forecast[forecast['target_time'] >= today_start_datetime]
-        gsp_truths_in_day = gsp_truths_in_day[gsp_truths_in_day['datetime_utc'] >= today_start_datetime]
-        gsp_truths_day_after = gsp_truths_day_after[gsp_truths_day_after['datetime_utc'] >= today_start_datetime]
+        forecast = forecast[forecast["target_time"] >= today_start_datetime]
+        gsp_truths_in_day = gsp_truths_in_day[
+            gsp_truths_in_day["datetime_utc"] >= today_start_datetime
+        ]
+        gsp_truths_day_after = gsp_truths_day_after[
+            gsp_truths_day_after["datetime_utc"] >= today_start_datetime
+        ]
 
-        print('Done filtering data')
+        print("Done filtering data")
 
-    print('Making trace for in day')
+    print("Making trace for in day")
 
     trace_in_day = go.Scatter(
         x=gsp_truths_in_day["datetime_utc"],
@@ -65,7 +75,7 @@ def make_plot(gsp_id: int = 0, show_yesterday:bool = True):
         line={"dash": "dash", "color": "blue"},
     )
 
-    print('Making trace for day after')
+    print("Making trace for day after")
 
     trace_day_after = go.Scatter(
         x=gsp_truths_day_after["datetime_utc"],
@@ -75,7 +85,7 @@ def make_plot(gsp_id: int = 0, show_yesterday:bool = True):
         line={"dash": "solid", "color": "blue"},
     )
 
-    print('Making trace for forecast')
+    print("Making trace for forecast")
 
     trace_forecast = go.Scatter(
         x=forecast["target_time"],
@@ -97,7 +107,7 @@ def make_plot(gsp_id: int = 0, show_yesterday:bool = True):
         yaxis_title="Solar generation [MW]",
     )
 
-    print('Done making plot')
+    print("Done making plot")
     return fig
 
 
@@ -111,8 +121,8 @@ def make_map_plot():
 
     # get all forecast
     print("Get all gsp forecasts")
-    fileobj = requests.get(URL + "/v0/GB/solar/gsp/forecast/all/")
-    d = fileobj.json()
+    r = requests.get(URL + "/v0/GB/solar/gsp/forecast/all/")
+    d = r.json()
     forecasts = ManyForecasts(**d)
 
     # format predictions
@@ -127,20 +137,29 @@ def make_map_plot():
 
     #  plot
     boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
+    boundaries_and_results.set_index('gsp_name', inplace=True)
 
     # make shape dict for plotting
     shapes_dict = json.loads(boundaries_and_results.to_json())
 
+    # make label
+    boundaries_and_results["label"] = (" GSP id:"
+        + boundaries_and_results["gsp_id"].astype(int).astype(str)
+    )
+
     # plot it
-    fig = go.Figure()
-    fig.add_trace(
+    fig = go.Figure(data=
         go.Choroplethmapbox(
             geojson=shapes_dict,
             locations=boundaries_and_results.index,
-            z=boundaries_and_results.value,
-            colorscale="Viridis",
+            z=boundaries_and_results.value.round(0),
+            colorscale="solar",
+            # hoverinfo=trace,
+            hovertext=boundaries_and_results['label'].tolist(),
+            name=None,
             zmax=500,
             zmin=0,
+            marker={"opacity": 0.5},
         )
     )
 
@@ -151,11 +170,33 @@ def make_map_plot():
         mapbox_bearing=90,
     )
     fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 30})
-    fig.update_layout(title=time.isoformat())
+    fig.update_layout(title=f"Solar Generation [MW]: {time.isoformat()}")
 
-    print('Done making map plot')
+    print("Done making map plot")
     return fig
 
+
+modal = html.Div(
+    [
+        dbc.Modal(
+            [
+                dbc.ModalHeader("GSP plot"),
+                dbc.ModalBody([
+                    html.H4(id='hover_info'),
+                    dcc.Graph(
+                        id='plot-modal',
+                        figure=make_plot(gsp_id=1, show_yesterday=False)
+                    )
+                ]),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close", className="ml-auto")
+                ),
+            ],
+            id="modal",
+            style={"width": "50%"}
+        ),
+    ]
+)
 
 tab1 = html.Div(
     [
@@ -168,9 +209,11 @@ tab1 = html.Div(
             ],
             value="Forecast",
         ),
-        dcc.Graph(id="plot-uk", figure=make_map_plot(), style={"width": "50%"}),
-        dcc.Checklist(["Yesterday"], [""], id='tick-show-yesterday'),
-        dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False))
+        dbc.Row([
+        dcc.Graph(id="plot-uk", figure=make_map_plot(), style={"width": "90%"}),
+            modal]),
+        dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
+        dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
     ]
 )
 
@@ -212,21 +255,21 @@ def render_content(tab):
         return tab2
 
 
-@app.callback(Output("plot-uk", "figure"), Input("radio-gsp-pv", "value"))
-def update_national_plot(value, yesterday_value: List[str]):
-    print(f"Updating national plot with {value}")
-    if value == "Forecast":
-        fig = make_map_plot()
-    else:
-        fig = make_pv_plot()
-    return fig
+# @app.callback(Output("plot-uk", "figure"), Input("radio-gsp-pv", "value"))
+# def update_national_plot(value):
+#     print(f"Updating national plot with {value}")
+#     if value == "Forecast":
+#         fig = make_map_plot()
+#     else:
+#         fig = make_pv_plot()
+#     return fig
 
 
 @app.callback(
     [Output("gsp-output-container", "children"), Output("plot-gsp", "figure")],
     [Input("gsp-dropdown", "value")],
 )
-def update_output(gsp_value:str):
+def update_output(gsp_value: str):
     print(f"Updating GSP value {gsp_value}")
     fig = make_plot(gsp_id=int(gsp_value), show_yesterday=True)
     return f"You have selected {gsp_value}", fig
@@ -234,13 +277,35 @@ def update_output(gsp_value:str):
 
 @app.callback(
     Output("plot-national", "figure"),
-    Input("tick-show-yesterday","value"),
+    Input("tick-show-yesterday", "value"),
 )
 def update_output(yesterday_value: List[str]):
     print(f"Updating National plot, {yesterday_value=}")
-    show_yesterday = True if 'Yesterday' in yesterday_value else False
-    fig = make_plot(gsp_id=0,show_yesterday=show_yesterday)
+    show_yesterday = True if "Yesterday" in yesterday_value else False
+    fig = make_plot(gsp_id=0, show_yesterday=show_yesterday)
     return fig
+
+
+@app.callback(
+    Output("modal", "is_open"),
+    Output("hover_info","children"),
+    Output("plot-modal", "figure"),
+    [Input("plot-uk", "clickData"), Input("close", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(hover_data, close_button, is_open):
+
+    print(f'{hover_data=} {close_button=} {is_open=}')
+
+    if hover_data:
+        print(hover_data)
+        print(hover_data['points'][0]['pointNumber'])
+        hovertext = hover_data['points'][0]['location'] + hover_data['points'][0]['hovertext']
+        gsp_id = int(hover_data['points'][0]['pointNumber'] + 1)
+        text = hovertext
+        fig = make_plot(gsp_id=gsp_id, show_yesterday=False)
+        return not is_open,text, fig
+    return is_open, None, None
 
 
 if __name__ == "__main__":
