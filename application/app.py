@@ -52,7 +52,7 @@ def make_app():
 
     tab1 = html.Div(
         [
-            html.H3(f"Summary"),
+            html.H3("Summary"),
             dcc.RadioItems(
                 id="radio-gsp-pv",
                 options=[

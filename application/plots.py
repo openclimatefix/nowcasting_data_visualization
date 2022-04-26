@@ -81,7 +81,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
     )
 
     if gsp_id == 0:
-        title = f"National - Forecast and Truths"
+        title = "National - Forecast and Truths"
     else:
         title = f"GSP {gsp_id} - Forecast and Truths"
 
