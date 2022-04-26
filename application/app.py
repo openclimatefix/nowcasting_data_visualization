@@ -18,7 +18,7 @@ external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 # Import Dash application
 def make_app():
-    """ Make Dash App """
+    """Make Dash App"""
     app = Dash(
         __name__,
         external_stylesheets=external_stylesheets + [dbc.themes.BOOTSTRAP],
@@ -36,13 +36,12 @@ def make_app():
                         [
                             html.H4(id="hover_info"),
                             dcc.Graph(
-                                id="plot-modal",
-                                figure=make_plot(gsp_id=1, show_yesterday=False)
+                                id="plot-modal", figure=make_plot(gsp_id=1, show_yesterday=False)
                             ),
                         ]
                     ),
                     dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
-                    dcc.Store(id='store-gsp', storage_type='memory'),
+                    dcc.Store(id="store-gsp", storage_type="memory"),
                 ],
                 id="modal",
                 is_open=False,
@@ -73,11 +72,8 @@ def make_app():
                 ]
             ),
             dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
-            dcc.Graph(
-                id="plot-national",
-                figure=make_plot(gsp_id=0, show_yesterday=False)
-            ),
-            dcc.Store(id='store-national', storage_type='memory'),
+            dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
+            dcc.Store(id="store-national", storage_type="memory"),
         ]
     )
 

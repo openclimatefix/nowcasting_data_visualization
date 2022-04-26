@@ -7,7 +7,8 @@ from plots import make_plot
 
 
 def make_callbacks(app):
-    """ Make callbacks """
+    """Make callbacks"""
+
     @app.callback(
         [Output("gsp-output-container", "children"), Output("plot-gsp", "figure")],
         [Input("gsp-dropdown", "value")],
@@ -20,7 +21,7 @@ def make_callbacks(app):
     @app.callback(
         Output("plot-national", "figure"),
         Input("tick-show-yesterday", "value"),
-        State('store-national','data')
+        State("store-national", "data"),
     )
     def update_national_output(yesterday_value: List[str], store_national_data):
         print(f"Updating National plot, {yesterday_value=}")
@@ -38,8 +39,10 @@ def make_callbacks(app):
         print(f"{click_data=} {close_button=} {is_open=}")
 
         if (close_button is None) and (click_data is None) and (fig is not None):
-            print('Sometimes this callback gets triggered with no data, '
-                  'but the figure is already there')
+            print(
+                "Sometimes this callback gets triggered with no data, "
+                "but the figure is already there"
+            )
             return is_open, fig
 
         if click_data or close_button:

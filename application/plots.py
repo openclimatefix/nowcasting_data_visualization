@@ -9,11 +9,11 @@ import requests
 from nowcasting_datamodel.models import GSPYield, ForecastValue, ManyForecasts
 from plotly import graph_objects as go
 
-URL = os.getenv('URL')
+URL = os.getenv("URL")
 
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
-    """ Make true and forecast plots """
+    """Make true and forecast plots"""
     print(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
     print("API request: day after")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
@@ -97,7 +97,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
 
 
 def make_map_plot():
-    """ Make map plot of forecast"""
+    """Make map plot of forecast"""
 
     # get gsp boundaries
     print("Get gsp boundaries")
@@ -123,25 +123,25 @@ def make_map_plot():
 
     #  plot
     boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
-    boundaries_and_results.set_index('gsp_name', inplace=True)
+    boundaries_and_results.set_index("gsp_name", inplace=True)
 
     # make shape dict for plotting
     shapes_dict = json.loads(boundaries_and_results.to_json())
 
     # make label
-    boundaries_and_results["label"] = (" GSP id:"
-        + boundaries_and_results["gsp_id"].astype(int).astype(str)
-    )
+    boundaries_and_results["label"] = " GSP id:" + boundaries_and_results["gsp_id"].astype(
+        int
+    ).astype(str)
 
     # plot it
-    fig = go.Figure(data=
-        go.Choroplethmapbox(
+    fig = go.Figure(
+        data=go.Choroplethmapbox(
             geojson=shapes_dict,
             locations=boundaries_and_results.index,
             z=boundaries_and_results.value.round(0),
             colorscale="solar",
             # hoverinfo=trace,
-            hovertext=boundaries_and_results['label'].tolist(),
+            hovertext=boundaries_and_results["label"].tolist(),
             name=None,
             zmax=500,
             zmin=0,
@@ -163,7 +163,7 @@ def make_map_plot():
 
 
 def make_pv_plot():
-    """ Make pv plot """
+    """Make pv plot"""
     # get pv data
     # TODO
 

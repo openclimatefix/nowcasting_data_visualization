@@ -7,16 +7,11 @@ https://hackersandslackers.com/plotly-dash-with-flask/
 """
 import dash_auth
 
-VALID_USERNAME_PASSWORD_PAIRS = {
-    'hello': 'world'
-}
+VALID_USERNAME_PASSWORD_PAIRS = {"hello": "world"}
 
 
 def make_auth(app):
-    """ Add auth to app """
-    dash_auth.BasicAuth(
-        app,
-        VALID_USERNAME_PASSWORD_PAIRS
-    )
+    """Add auth to app"""
+    dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 
     # TODO use a proper log in using Auth0
