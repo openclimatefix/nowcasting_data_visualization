@@ -17,3 +17,4 @@ Things to do
 - deploy on aws
 - tests for functions
 - tests for application
+
