@@ -16,9 +16,9 @@ jobs:
         run: docker-compose -f test-docker-compose.yml build
 
       - name: Run tests inside the container
-        with: # Set URL requests
-          URL: ${{ secrets.URL }}
         run: docker-compose -f test-docker-compose.yml run data_visualization
+        env: # Set URL requests
+          URL: ${{ secrets.URL }}
 
       - name: Copy coverage
         run: |
