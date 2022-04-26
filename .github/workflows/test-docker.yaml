@@ -17,6 +17,8 @@ jobs:
 
       - name: Run tests inside the container
         run: docker-compose -f test-docker-compose.yml run data_visualization
+        with: # Set URL requests
+          URL: ${{ secrets.URL }}
 
       - name: Copy coverage
         run: |
