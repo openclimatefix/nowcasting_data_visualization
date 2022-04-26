@@ -1,2 +1,10 @@
 dash
+dash_auth
+dash_bootstrap_components
 pandas
+geopandas
+pytest
+pytest-cov
+plotly
+requests
+nowcasting_datamodel

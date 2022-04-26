@@ -11,7 +11,7 @@ services:
     environment:
       - URL=$URL
     command: >
-      bash -c "pytest --cov=./src
+      bash -c "pytest --cov=./application
       && coverage report -m
       && coverage xml
       && cp .coverage ./tests/
