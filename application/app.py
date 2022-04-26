@@ -1,13 +1,12 @@
 """ Main app file """
-from dash import Dash, html, dcc
-import dash_bootstrap_components as dbc
-
 import logging
 
-from auth import make_auth
-from plots import make_plot, make_map_plot
-from callbacks import make_callbacks
+import dash_bootstrap_components as dbc
+from dash import Dash, dcc, html
 
+from auth import make_auth
+from callbacks import make_callbacks
+from plots import make_map_plot, make_plot
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]

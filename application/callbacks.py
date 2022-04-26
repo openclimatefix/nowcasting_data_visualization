@@ -1,7 +1,7 @@
 """ Callbacks functions """
-from dash import Output, Input, State
-
 from typing import List
+
+from dash import Input, Output, State
 
 from plots import make_plot
 
