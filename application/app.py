@@ -41,6 +41,7 @@ modal = html.Div(
                 dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
             ],
             id="modal",
+            is_open=False,
             style={"width": "50%"},
         ),
     ]
@@ -74,16 +75,6 @@ tab1 = html.Div(
         ),
     ]
 )
-
-# tab2 = html.Div(
-#     [
-#         html.H3("Summary"),
-#         dcc.Dropdown(list(range(0, 399)), "0", id="gsp-dropdown"),
-#         html.Div(id="gsp-output-container"),
-#         dcc.Graph(id="plot-gsp", figure=make_plot(gsp_id=0)),
-#     ]
-# )
-
 
 app.layout = html.Div(children=[html.H1(children="Data visualization dashboard"), tab1])
 

@@ -16,16 +16,19 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
     r = response.json()
     gsp_truths_day_after = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
+    print(f"API request: day after. Found {len(gsp_truths_day_after)} data points")
 
     print("API request: in day")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=in-day")
     r = response.json()
     gsp_truths_in_day = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
+    print(f"API request: in day. Found {len(gsp_truths_in_day)} data points")
 
     print(f"API request: forecast {gsp_id=}")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/forecast/latest/{gsp_id}")
     r = response.json()
     forecast = pd.DataFrame([ForecastValue(**i).__dict__ for i in r])
+    print(f"API request: forecast. Found {len(forecast)} data points")
 
     if not show_yesterday:
         print("Only showing todays results")
@@ -44,7 +47,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
 
         print("Done filtering data")
 
-    print("Making trace for in day")
+    print(f"Making trace for in day with {len(gsp_truths_in_day)} data points")
 
     trace_in_day = go.Scatter(
         x=gsp_truths_in_day["datetime_utc"],
@@ -54,7 +57,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
         line={"dash": "dash", "color": "blue"},
     )
 
-    print("Making trace for day after")
+    print(f"Making trace for day after with {len(gsp_truths_day_after)} data points")
 
     trace_day_after = go.Scatter(
         x=gsp_truths_day_after["datetime_utc"],
@@ -64,7 +67,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
         line={"dash": "solid", "color": "blue"},
     )
 
-    print("Making trace for forecast")
+    print(f"Making trace for forecast with {len(forecast)} data points")
 
     trace_forecast = go.Scatter(
         x=forecast["target_time"],
