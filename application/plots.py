@@ -1,3 +1,4 @@
+"""Main plots function """
 import json
 import os
 from datetime import datetime, timezone
@@ -12,6 +13,7 @@ URL = os.getenv('URL')
 
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
+    """ Make true and forecast plots """
     print(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
     print("API request: day after")
     response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
@@ -95,6 +97,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
 
 
 def make_map_plot():
+    """ Make map plot of forecast"""
 
     # get gsp boundaries
     print("Get gsp boundaries")
@@ -160,6 +163,7 @@ def make_map_plot():
 
 
 def make_pv_plot():
+    """ Make pv plot """
     # get pv data
     # TODO
 

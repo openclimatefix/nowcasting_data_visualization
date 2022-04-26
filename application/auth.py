@@ -1,4 +1,6 @@
 """
+Links to help with auth
+
 https://auth0.com/docs/quickstart/webapp/python/01-login
 and
 https://hackersandslackers.com/plotly-dash-with-flask/
@@ -11,6 +13,7 @@ VALID_USERNAME_PASSWORD_PAIRS = {
 
 
 def make_auth(app):
+    """ Add auth to app """
     dash_auth.BasicAuth(
         app,
         VALID_USERNAME_PASSWORD_PAIRS

@@ -1,3 +1,4 @@
+""" Callbacks functions """
 from dash import Output, Input, State
 
 from typing import List
@@ -6,6 +7,7 @@ from plots import make_plot
 
 
 def make_callbacks(app):
+    """ Make callbacks """
     @app.callback(
         [Output("gsp-output-container", "children"), Output("plot-gsp", "figure")],
         [Input("gsp-dropdown", "value")],

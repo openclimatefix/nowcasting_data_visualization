@@ -1,3 +1,4 @@
+""" Main app file """
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 
@@ -17,6 +18,7 @@ external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 # Import Dash application
 def make_app():
+    """ Make Dash App """
     app = Dash(
         __name__,
         external_stylesheets=external_stylesheets + [dbc.themes.BOOTSTRAP],
