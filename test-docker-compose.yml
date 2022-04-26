@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+
+  data_visualization:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TESTING: 1
+    environment:
+      - URL=$URL
+    command: >
+      bash -c "pytest --cov=./src
+      && coverage report -m
+      && coverage xml
+      && cp .coverage ./tests/
+      && cp coverage.xml ./tests/"
+    volumes:
+      - ./application/:/application
+      - ./tests/:/tests
