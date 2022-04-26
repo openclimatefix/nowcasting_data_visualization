@@ -17,5 +17,5 @@ services:
       && cp .coverage ./tests/
       && cp coverage.xml ./tests/"
     volumes:
-      - ./application/:/application
-      - ./tests/:/tests
+      - ./application/:/app/application
+      - ./tests/:/app/tests
