@@ -2,10 +2,9 @@
 import logging
 
 import dash_bootstrap_components as dbc
-from dash import Dash, dcc, html
-
 from auth import make_auth
 from callbacks import make_callbacks
+from dash import Dash, dcc, html
 from plots import make_map_plot, make_plot
 
 logger = logging.getLogger(__name__)
