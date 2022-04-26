@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime, timezone
 
 import geopandas as gpd
@@ -7,7 +8,7 @@ import requests
 from nowcasting_datamodel.models import GSPYield, ForecastValue, ManyForecasts
 from plotly import graph_objects as go
 
-URL = "http://nowcasting-api-development.eu-west-1.elasticbeanstalk.com"
+URL = os.getenv('URL')
 
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):

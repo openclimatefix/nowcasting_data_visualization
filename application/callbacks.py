@@ -18,8 +18,9 @@ def make_callbacks(app):
     @app.callback(
         Output("plot-national", "figure"),
         Input("tick-show-yesterday", "value"),
+        State('store-national','data')
     )
-    def update_national_output(yesterday_value: List[str]):
+    def update_national_output(yesterday_value: List[str], store_national_data):
         print(f"Updating National plot, {yesterday_value=}")
         show_yesterday = True if "Yesterday" in yesterday_value else False
         fig = make_plot(gsp_id=0, show_yesterday=show_yesterday)
@@ -32,7 +33,7 @@ def make_callbacks(app):
     )
     def toggle_modal(click_data, close_button, is_open, fig):
 
-        print(f"{click_data=} {close_button=} {is_open=} {fig=}")
+        print(f"{click_data=} {close_button=} {is_open=}")
 
         if (close_button is None) and (click_data is None) and (fig is not None):
             print('Sometimes this callback gets triggered with no data, '

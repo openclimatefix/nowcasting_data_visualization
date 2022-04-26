@@ -18,3 +18,8 @@ Things to do
 - tests for functions
 - tests for application
 
+### Local pytest
+
+To run local pytests you need to
+1. add `application` to python path `export PYTHONPATH=$PYTHONPATH:./application`
+2. run pytests: `pytest`
