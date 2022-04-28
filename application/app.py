@@ -3,9 +3,11 @@ import logging
 
 import dash_bootstrap_components as dbc
 from auth import make_auth
-from callbacks import make_callbacks
 from dash import Dash, dcc, html
-from plots import make_map_plot, make_plot
+from dash import Input, Output
+
+from tabs.summary.callbacks import make_callbacks
+from tabs.summary.layout import make_layout
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
@@ -27,59 +29,35 @@ def make_app():
 
     make_auth(app)
 
-    modal = html.Div(
-        [
-            dbc.Modal(
-                [
-                    dbc.ModalHeader("GSP plot"),
-                    dbc.ModalBody(
-                        [
-                            html.H4(id="hover_info"),
-                            dcc.Graph(
-                                id="plot-modal", figure=make_plot(gsp_id=1, show_yesterday=False)
-                            ),
-                        ]
-                    ),
-                    dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
-                    dcc.Store(id="store-gsp", storage_type="memory"),
-                ],
-                id="modal",
-                is_open=False,
-                style={"width": "50%"},
-            ),
-        ]
-    )
+    tab1 = make_layout()
 
-    tab1 = html.Div(
-        [
-            html.H3("Summary"),
-            dcc.RadioItems(
-                id="radio-gsp-pv",
-                options=[
-                    {"label": "GSP Forecast", "value": "Forecast"},
-                    {"label": "PVLive", "value": "PVLive"},
+    app.layout = html.Div(
+        children=[
+            html.H1(children="Data visualization dashboard"),
+            dcc.Tabs(
+                id="tabs-example-graph",
+                value="tab-1",
+                children=[
+                    dcc.Tab(label="Summary", value="tab-1"),
+                    dcc.Tab(label="PV", value="tab-2"),
                 ],
-                value="Forecast",
             ),
-            dbc.Row(
-                [
-                    dcc.Graph(
-                        id="plot-uk",
-                        figure=make_map_plot(),
-                        style={"width": "90%"},
-                    ),
-                    modal,
-                ]
-            ),
-            dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
-            dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
-            dcc.Store(id="store-national", storage_type="memory"),
+            html.Div(id="tabs-content-example-graph"),
             html.Footer(f"version {version}", id="footer"),
         ]
     )
 
-    app.layout = html.Div(children=[html.H1(children="Data visualization dashboard"), tab1])
+    # call back to switch tabs
+    @app.callback(
+        Output("tabs-content-example-graph", "children"), Input("tabs-example-graph", "value")
+    )
+    def render_content(tab):
+        if tab == "tab-1":
+            return tab1
+        elif tab == "tab-2":
+            return html.H2(children="PV data")
 
+    # add other tab callbacks
     app = make_callbacks(app)
 
     return app
