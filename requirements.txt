@@ -7,4 +7,4 @@ pytest
 pytest-cov
 plotly
 requests
-nowcasting_datamodel
+nowcasting_datamodel==0.0.46
