@@ -6,11 +6,12 @@ on:
 
 
 jobs:
-  call-run-python-linters:
+  call-run-docker-release:
     uses: openclimatefix/.github/.github/workflows/docker-release.yml@main
-    with:
+    secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    with:
       image_base_name: nowcasting_data_visualization
 
 
