@@ -10,7 +10,7 @@ from plots import make_map_plot, make_plot
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "0.0.3"
+version = "0.0.4"
 
 
 """Construct core Flask application with embedded Dash app."""
