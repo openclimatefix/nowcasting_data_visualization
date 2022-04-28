@@ -87,4 +87,5 @@ def make_app():
 
 if __name__ == "__main__":
     app = make_app()
-    app.run_server(debug=True, port=80)
+    app.run_server(debug=True, port=8000, host="0.0.0.0")
+

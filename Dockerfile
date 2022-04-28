@@ -1,4 +1,5 @@
 FROM python:3.9-slim-buster
+EXPOSE 8000
 
 # copy files over
 COPY ./application /app/application
