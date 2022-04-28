@@ -8,6 +8,8 @@ from dash import Input, Output
 
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
+from tabs.pv.layout import pv_make_layout
+from tabs.pv.callbacks import pv_make_callbacks
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
@@ -30,13 +32,14 @@ def make_app():
     make_auth(app)
 
     tab1 = make_layout()
+    tab2 = pv_make_layout()
 
     app.layout = html.Div(
         children=[
             html.H1(children="Data visualization dashboard"),
             dcc.Tabs(
                 id="tabs-example-graph",
-                value="tab-1",
+                value="tab-2",
                 children=[
                     dcc.Tab(label="Summary", value="tab-1"),
                     dcc.Tab(label="PV", value="tab-2"),
@@ -53,12 +56,16 @@ def make_app():
     )
     def render_content(tab):
         if tab == "tab-1":
-            return tab1
+            print('Making tab1')
+            layout = tab1
         elif tab == "tab-2":
-            return html.H2(children="PV data")
+            print('Making tab2')
+            layout = tab2
+        return layout
 
     # add other tab callbacks
     app = make_callbacks(app)
+    app = pv_make_callbacks(app)
 
     return app
 
