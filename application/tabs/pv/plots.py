@@ -57,6 +57,8 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
 
     if len(pv_yields_df) == 0:
         logger.warning("Found no pv yields, this might cause an error")
+        # this gives an empty plot back, but stops error on page
+        return go.Figure()
     else:
         logger.debug(f"Found {len(pv_yields_df)} pv yields")
 
