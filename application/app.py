@@ -24,7 +24,7 @@ def make_app():
     app = Dash(
         __name__,
         external_stylesheets=external_stylesheets + [dbc.themes.BOOTSTRAP],
-        url_base_pathname="/dash/",
+        # url_base_pathname="/dash/",
     )
 
     make_auth(app)
