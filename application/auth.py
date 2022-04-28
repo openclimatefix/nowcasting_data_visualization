@@ -5,9 +5,11 @@ https://auth0.com/docs/quickstart/webapp/python/01-login
 and
 https://hackersandslackers.com/plotly-dash-with-flask/
 """
+import os
+
 import dash_auth
 
-VALID_USERNAME_PASSWORD_PAIRS = {"hello": "world"}
+VALID_USERNAME_PASSWORD_PAIRS = {os.getenv("USERNAME", "hello"): os.getenv("WORD", "world")}
 
 
 def make_auth(app):

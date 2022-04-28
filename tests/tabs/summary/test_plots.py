@@ -1,4 +1,4 @@
-from plots import make_map_plot, make_plot
+from tabs.summary.plots import make_map_plot, make_plot
 
 
 def test_make_plot():
