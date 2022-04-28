@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  data_visualization:
+  nowcasting_data_visualization:
     build:
       context: .
       dockerfile: Dockerfile

@@ -16,7 +16,7 @@ jobs:
         run: docker-compose -f test-docker-compose.yml build
 
       - name: Run tests inside the container
-        run: docker-compose -f test-docker-compose.yml run data_visualization
+        run: docker-compose -f test-docker-compose.yml run nowcasting_data_visualization
         env: # Set URL requests
           URL: ${{ secrets.URL }}
 
