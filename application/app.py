@@ -3,13 +3,11 @@ import logging
 
 import dash_bootstrap_components as dbc
 from auth import make_auth
-from dash import Dash, dcc, html
-from dash import Input, Output
-
+from dash import Dash, Input, Output, dcc, html
+from tabs.pv.callbacks import pv_make_callbacks
+from tabs.pv.layout import pv_make_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
-from tabs.pv.layout import pv_make_layout
-from tabs.pv.callbacks import pv_make_callbacks
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
@@ -56,10 +54,10 @@ def make_app():
     )
     def render_content(tab):
         if tab == "tab-1":
-            print('Making tab1')
+            print("Making tab1")
             layout = tab1
         elif tab == "tab-2":
-            print('Making tab2')
+            print("Making tab2")
             layout = tab2
         return layout
 
@@ -73,4 +71,3 @@ def make_app():
 if __name__ == "__main__":
     app = make_app()
     app.run_server(debug=True, port=8000, host="0.0.0.0")
-

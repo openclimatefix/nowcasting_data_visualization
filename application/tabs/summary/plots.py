@@ -10,7 +10,7 @@ from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
 API_URL = os.getenv("API_URL")
-assert API_URL is not None, 'API_URL has not been set'
+assert API_URL is not None, "API_URL has not been set"
 
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):

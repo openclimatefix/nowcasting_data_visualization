@@ -1,25 +1,24 @@
 """Main plots function """
 import json
-import os
 import logging
+import os
 from datetime import datetime, timedelta, timezone
+from typing import List, Optional
 
 import geopandas as gpd
-from typing import List, Optional
 import pandas as pd
 import requests
-from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
-from plotly import graph_objects as go
-
 from nowcasting_datamodel.connection import DatabaseConnection
+from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from nowcasting_datamodel.models.base import Base_PV
-from nowcasting_datamodel.models.pv import PVYield, PVYieldSQL, PVSystemSQL
+from nowcasting_datamodel.models.pv import PVSystemSQL, PVYield, PVYieldSQL
 from nowcasting_datamodel.read.read_pv import get_pv_yield
+from plotly import graph_objects as go
 
 logger = logging.getLogger(__name__)
 
 DB_URL_PV = os.getenv("DB_URL_PV")
-assert DB_URL_PV is not None, 'DB_URL_PV has not been set'
+assert DB_URL_PV is not None, "DB_URL_PV has not been set"
 
 
 def get_all_pv_systems_ids() -> List[int]:
@@ -48,9 +47,9 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
 
     with db_connection.get_session() as session:
         start_utc = datetime.now(tz=timezone.utc) - timedelta(days=1)
-        pv_yields: List[PVYieldSQL] = get_pv_yield(session=session,
-                                                   start_utc=start_utc,
-                                                   pv_systems_ids=pv_systems_ids)
+        pv_yields: List[PVYieldSQL] = get_pv_yield(
+            session=session, start_utc=start_utc, pv_systems_ids=pv_systems_ids
+        )
 
         pv_yields_df = pd.DataFrame(
             [(PVYield.from_orm(pv_yield)).__dict__ for pv_yield in pv_yields]
@@ -79,7 +78,6 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
 
     print(pv_yields_df.columns)
 
-
     # plot
     traces_pv = []
     for i in range(len(pv_yields_df.columns)):
@@ -93,7 +91,7 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
 
     fig = go.Figure(data=traces_pv)
     fig.update_layout(
-        title='PV data',
+        title="PV data",
         xaxis_title="Time [UTC]",
         yaxis_title="Solar generation [kW]",
     )

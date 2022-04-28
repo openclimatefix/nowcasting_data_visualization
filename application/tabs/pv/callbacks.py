@@ -1,10 +1,10 @@
 """ Callbacks functions """
 from typing import List
+
 import numpy as np
-
-
 from dash import Input, Output
-from .plots import make_pv_plot, get_all_pv_systems_ids
+
+from .plots import get_all_pv_systems_ids, make_pv_plot
 
 
 def pv_make_callbacks(app):
@@ -29,9 +29,8 @@ def pv_make_callbacks(app):
         random_choices = list(np.random.choice(len(get_all_pv_systems_ids()), 10))
         init_pv_systems = np.array(all_pv_systems_ids)[random_choices]
 
-        print(f'random chooses are {init_pv_systems}')
+        print(f"random chooses are {init_pv_systems}")
 
         return init_pv_systems
-
 
     return app
