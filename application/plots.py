@@ -9,26 +9,26 @@ import requests
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
-URL = os.getenv("URL")
+API_URL = os.getenv("API_URL")
 
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
     """Make true and forecast plots"""
     print(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
     print("API request: day after")
-    response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
+    response = requests.get(f"{API_URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
     r = response.json()
     gsp_truths_day_after = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
     print(f"API request: day after. Found {len(gsp_truths_day_after)} data points")
 
     print("API request: in day")
-    response = requests.get(f"{URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=in-day")
+    response = requests.get(f"{API_URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=in-day")
     r = response.json()
     gsp_truths_in_day = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
     print(f"API request: in day. Found {len(gsp_truths_in_day)} data points")
 
     print(f"API request: forecast {gsp_id=}")
-    response = requests.get(f"{URL}/v0/GB/solar/gsp/forecast/latest/{gsp_id}")
+    response = requests.get(f"{API_URL}/v0/GB/solar/gsp/forecast/latest/{gsp_id}")
     r = response.json()
     forecast = pd.DataFrame([ForecastValue(**i).__dict__ for i in r])
     print(f"API request: forecast. Found {len(forecast)} data points")
@@ -101,13 +101,13 @@ def make_map_plot():
 
     # get gsp boundaries
     print("Get gsp boundaries")
-    r = requests.get(URL + "/v0/GB/solar/gsp/gsp_boundaries/")
+    r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
 
     # get all forecast
     print("Get all gsp forecasts")
-    r = requests.get(URL + "/v0/GB/solar/gsp/forecast/all/")
+    r = requests.get(API_URL + "/v0/GB/solar/gsp/forecast/all/")
     d = r.json()
     forecasts = ManyForecasts(**d)
 

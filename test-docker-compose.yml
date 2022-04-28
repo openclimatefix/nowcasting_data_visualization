@@ -8,7 +8,7 @@ services:
       args:
         TESTING: 1
     environment:
-      - URL=$URL
+      - API_URL=$API_URL
     command: >
       bash -c "pytest --cov=./application
       && coverage report -m

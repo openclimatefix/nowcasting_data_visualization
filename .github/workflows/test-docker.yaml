@@ -18,7 +18,7 @@ jobs:
       - name: Run tests inside the container
         run: docker-compose -f test-docker-compose.yml run nowcasting_data_visualization
         env: # Set URL requests
-          URL: ${{ secrets.URL }}
+          API_URL: ${{ secrets.API_URL }}
 
       - name: Copy coverage
         run: |
