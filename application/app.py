@@ -74,7 +74,7 @@ def make_app():
             dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
             dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
             dcc.Store(id="store-national", storage_type="memory"),
-            html.Footer(version, id="footer"),
+            html.Footer(f'version {version}', id="footer"),
         ]
     )
 
