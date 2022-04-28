@@ -10,6 +10,8 @@ from plots import make_map_plot, make_plot
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
+version = "0.0.1"
+
 
 """Construct core Flask application with embedded Dash app."""
 
@@ -72,6 +74,7 @@ def make_app():
             dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
             dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
             dcc.Store(id="store-national", storage_type="memory"),
+            html.Footer(f"version {version}", id="footer"),
         ]
     )
 
