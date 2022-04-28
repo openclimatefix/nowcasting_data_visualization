@@ -9,7 +9,7 @@ import os
 
 import dash_auth
 
-VALID_USERNAME_PASSWORD_PAIRS = {os.getenv('USERNAME',"hello"): os.getenv('PWD',"world")}
+VALID_USERNAME_PASSWORD_PAIRS = {os.getenv('USERNAME',"hello"): os.getenv('WORD',"world")}
 
 
 def make_auth(app):
