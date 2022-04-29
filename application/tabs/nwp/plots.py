@@ -1,3 +1,4 @@
+""" Make nwp plots """
 from plotly import graph_objects as go
 from typing import List
 from datetime import datetime

@@ -9,4 +9,5 @@ plotly
 requests
 humanize
 xarray
+fsspec
 nowcasting_datamodel==0.0.46

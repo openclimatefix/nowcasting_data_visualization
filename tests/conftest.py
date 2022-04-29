@@ -115,7 +115,7 @@ def pv_yields_and_systems(db_session):
 
 @pytest.fixture
 def nwp_data_filename():
-
+    """ Make fake nwp data """
     with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
 
         # middle of the UK
