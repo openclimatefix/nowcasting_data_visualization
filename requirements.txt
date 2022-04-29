@@ -10,4 +10,5 @@ requests
 humanize
 xarray
 fsspec
+pathy
 nowcasting_datamodel==0.0.46
