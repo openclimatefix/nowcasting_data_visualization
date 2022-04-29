@@ -116,7 +116,7 @@ def pv_yields_and_systems(db_session):
 def nwp_data_filename():
     """Make fake nwp data"""
     with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
-        os.environ["NWP_AWS_PATH"] = str(Pathy(t.name).parent)
+        os.environ["NWP_AWS_FILENAME"] = t.name
 
         # middle of the UK
         t0_datetime_utc = datetime(2022,1,1)
