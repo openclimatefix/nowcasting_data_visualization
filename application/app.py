@@ -18,7 +18,7 @@ config.fileConfig("./logging.config")
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "0.0.15"
+version = "0.0.16"
 
 
 """Construct core Flask application with embedded Dash app."""
