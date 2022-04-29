@@ -1,11 +1,10 @@
 """ Download nwp data """
-import os
 import logging
+import os
 from typing import Optional
 
 import fsspec
 from pathy import Pathy
-
 
 logger = logging.getLogger(__name__)
 
