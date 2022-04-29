@@ -3,11 +3,11 @@ import logging
 import os
 from datetime import datetime, timedelta, timezone
 
-import pandas as pd
 import humanize
+import pandas as pd
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
-from nowcasting_datamodel.models.models import InputDataLastUpdatedSQL, InputDataLastUpdated
+from nowcasting_datamodel.models.models import InputDataLastUpdated, InputDataLastUpdatedSQL
 from nowcasting_datamodel.read.read import get_latest_input_data_last_updated
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ def get_consumer_status() -> dict:
         input_data_last_updated_df["Last pulled"]
     ).dt.strftime("%Y-%m-%d %H:%M:%S")
     input_data_last_updated_df.rename(columns={"Last pulled": "Last pulled [UTC]"}, inplace=True)
-    for col in ['Warning','Error']:
+    for col in ["Warning", "Error"]:
         input_data_last_updated_df[col] = input_data_last_updated_df[col].apply(
             lambda x: humanize.precisedelta(x)
         )

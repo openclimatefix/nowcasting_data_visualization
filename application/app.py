@@ -6,9 +6,9 @@ from auth import make_auth
 from dash import Dash, Input, Output, dcc, html
 from tabs.pv.callbacks import pv_make_callbacks
 from tabs.pv.layout import pv_make_layout
+from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
-from tabs.status.layout import make_status_layout
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
