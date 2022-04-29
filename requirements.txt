@@ -8,4 +8,5 @@ pytest-cov
 plotly
 requests
 humanize
+xarray
 nowcasting_datamodel==0.0.46
