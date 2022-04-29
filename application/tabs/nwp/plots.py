@@ -1,6 +1,6 @@
 """ Make nwp plots """
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 import xarray as xr
@@ -58,13 +58,13 @@ def make_buttons() -> dict:
     )
 
 
-def plot_nwp_data(init_time, variable):
+def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.netcdf"):
     """Plot nwp data"""
-
-    filename = "nwp_latest.netcdf"
 
     print("Loading data")
     nwp_xr = xr.load_dataset(filename)["UKV"]
+    init_time = datetime.fromisoformat(init_time)
+
     nwp_xr = nwp_xr.sel(init_time=init_time)
     nwp_xr = nwp_xr.sel(variable=variable)
 
@@ -74,7 +74,6 @@ def plot_nwp_data(init_time, variable):
     print("Making nwp traces for animation")
     traces = []
     labels = []
-    init_time = datetime.fromisoformat(init_time)
     for i in range(len(nwp_xr.step)):
         traces.append(go.Heatmap(z=nwp_xr[i].values, zmin=0, zmax=1000))
         # do we need pandas here?

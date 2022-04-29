@@ -119,7 +119,7 @@ def nwp_data_filename():
         os.environ['NWP_AWS_PATH'] = str(Pathy(t.name).parent)
 
         # middle of the UK
-        t0_datetime_utc = datetime.utcnow() - timedelta(hours=2)
+        t0_datetime_utc = datetime(2022,1,1)
         image_size = 1000
         time_steps = 10
 
