@@ -17,7 +17,7 @@ def pv_make_callbacks(app):
     def update_pv_plot(pv_system_id: List[int]):
         print(f"Updating PV plot with pv system {pv_system_id}")
         fig = make_pv_plot(pv_systems_ids=pv_system_id)
-        print(f"Updating PV plot: done")
+        print("Updating PV plot: done")
         return fig
 
     @app.callback(

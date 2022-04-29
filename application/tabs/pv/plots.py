@@ -1,15 +1,11 @@
 """Main plots function """
-import json
 import logging
 import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
-import geopandas as gpd
 import pandas as pd
-import requests
 from nowcasting_datamodel.connection import DatabaseConnection
-from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.pv import PVSystemSQL, PVYield, PVYieldSQL
 from nowcasting_datamodel.read.read_pv import get_pv_yield
