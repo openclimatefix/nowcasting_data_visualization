@@ -10,6 +10,7 @@ requests
 humanize
 xarray
 h5netcdf
+s3fs
 fsspec
 pathy
 nowcasting_datamodel==0.0.46
