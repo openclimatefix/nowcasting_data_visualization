@@ -4,6 +4,7 @@ EXPOSE 8000
 # copy files over
 COPY ./application /app/application
 COPY ./tests /app/tests
+COPY ./logging.config /app/
 COPY ./requirements.txt /app/requirements.txt
 
 # set working directory

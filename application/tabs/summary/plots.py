@@ -1,5 +1,6 @@
 """Main plots function """
 import json
+import logging
 import os
 from datetime import datetime, timezone
 
@@ -12,30 +13,32 @@ from plotly import graph_objects as go
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
 
+logger = logging.getLogger(__name__)
+
 
 def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
     """Make true and forecast plots"""
-    print(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
-    print("API request: day after")
+    logger.info(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
+    logger.debug("API request: day after")
     response = requests.get(f"{API_URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
     r = response.json()
     gsp_truths_day_after = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
-    print(f"API request: day after. Found {len(gsp_truths_day_after)} data points")
+    logger.debug(f"API request: day after. Found {len(gsp_truths_day_after)} data points")
 
-    print("API request: in day")
+    logger.debug("API request: in day")
     response = requests.get(f"{API_URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=in-day")
     r = response.json()
     gsp_truths_in_day = pd.DataFrame([GSPYield(**i).__dict__ for i in r])
-    print(f"API request: in day. Found {len(gsp_truths_in_day)} data points")
+    logger.debug(f"API request: in day. Found {len(gsp_truths_in_day)} data points")
 
-    print(f"API request: forecast {gsp_id=}")
+    logger.debug(f"API request: forecast {gsp_id=}")
     response = requests.get(f"{API_URL}/v0/GB/solar/gsp/forecast/latest/{gsp_id}")
     r = response.json()
     forecast = pd.DataFrame([ForecastValue(**i).__dict__ for i in r])
-    print(f"API request: forecast. Found {len(forecast)} data points")
+    logger.debug(f"API request: forecast. Found {len(forecast)} data points")
 
     if not show_yesterday:
-        print("Only showing todays results")
+        logger.debug("Only showing todays results")
         today_start_datetime = datetime.now(timezone.utc)
         today_start_datetime = today_start_datetime.replace(
             hour=-0, minute=0, second=0, microsecond=0
@@ -49,9 +52,9 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
             gsp_truths_day_after["datetime_utc"] >= today_start_datetime
         ]
 
-        print("Done filtering data")
+        logger.debug("Done filtering data")
 
-    print(f"Making trace for in day with {len(gsp_truths_in_day)} data points")
+    logger.debug(f"Making trace for in day with {len(gsp_truths_in_day)} data points")
 
     trace_in_day = go.Scatter(
         x=gsp_truths_in_day["datetime_utc"],
@@ -61,7 +64,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
         line={"dash": "dash", "color": "blue"},
     )
 
-    print(f"Making trace for day after with {len(gsp_truths_day_after)} data points")
+    logger.debug(f"Making trace for day after with {len(gsp_truths_day_after)} data points")
 
     trace_day_after = go.Scatter(
         x=gsp_truths_day_after["datetime_utc"],
@@ -71,7 +74,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
         line={"dash": "solid", "color": "blue"},
     )
 
-    print(f"Making trace for forecast with {len(forecast)} data points")
+    logger.debug(f"Making trace for forecast with {len(forecast)} data points")
 
     trace_forecast = go.Scatter(
         x=forecast["target_time"],
@@ -93,7 +96,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
         yaxis_title="Solar generation [MW]",
     )
 
-    print("Done making plot")
+    logger.debug("Done making plot")
     return fig
 
 
@@ -101,13 +104,13 @@ def make_map_plot():
     """Make map plot of forecast"""
 
     # get gsp boundaries
-    print("Get gsp boundaries")
+    logger.debug("Get gsp boundaries")
     r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
 
     # get all forecast
-    print("Get all gsp forecasts")
+    logger.debug("Get all gsp forecasts")
     r = requests.get(API_URL + "/v0/GB/solar/gsp/forecast/all/")
     d = r.json()
     forecasts = ManyForecasts(**d)
@@ -161,7 +164,7 @@ def make_map_plot():
     )
     fig.update_layout(title=f"Solar Generation [MW]: {time.isoformat()}")
 
-    print("Done making map plot")
+    logger.debug("Done making map plot")
     return fig
 
 

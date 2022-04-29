@@ -1,5 +1,6 @@
 """ Main app file """
 import logging
+from logging import config
 
 import dash_bootstrap_components as dbc
 from auth import make_auth
@@ -13,6 +14,7 @@ from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
 
+config.fileConfig("./logging.config")
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
