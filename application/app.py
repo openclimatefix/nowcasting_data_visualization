@@ -8,6 +8,7 @@ from tabs.pv.callbacks import pv_make_callbacks
 from tabs.pv.layout import pv_make_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
+from tabs.status.layout import make_status_layout
 
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
@@ -29,18 +30,20 @@ def make_app():
 
     make_auth(app)
 
-    tab1 = make_layout()
-    tab2 = pv_make_layout()
+    tab_summary = make_layout()
+    tab_pv = pv_make_layout()
+    tab_status = make_status_layout()
 
     app.layout = html.Div(
         children=[
             html.H1(children="Data visualization dashboard"),
             dcc.Tabs(
                 id="tabs-example-graph",
-                value="tab-2",
+                value="tab-status",
                 children=[
-                    dcc.Tab(label="Summary", value="tab-1"),
-                    dcc.Tab(label="PV", value="tab-2"),
+                    dcc.Tab(label="Summary", value="tab-summary"),
+                    dcc.Tab(label="Status", value="tab-status"),
+                    dcc.Tab(label="PV", value="tab-pv"),
                 ],
             ),
             html.Div(id="tabs-content-example-graph"),
@@ -53,12 +56,15 @@ def make_app():
         Output("tabs-content-example-graph", "children"), Input("tabs-example-graph", "value")
     )
     def render_content(tab):
-        if tab == "tab-1":
-            print("Making tab1")
-            layout = tab1
-        elif tab == "tab-2":
-            print("Making tab2")
-            layout = tab2
+        if tab == "tab-summary":
+            print("Making summary tab")
+            layout = tab_summary
+        elif tab == "tab-pv":
+            print("Making pv tab")
+            layout = tab_pv
+        elif tab == "tab-status":
+            print("Making status tab")
+            layout = tab_status
         return layout
 
     # add other tab callbacks

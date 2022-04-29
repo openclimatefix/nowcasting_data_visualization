@@ -29,13 +29,34 @@ def make_layout():
                 ],
                 id="modal",
                 is_open=False,
-                style={"width": "50%"},
             ),
         ]
     )
 
-    tab1 = html.Div(
+    national_plot = html.Div(
         [
+            dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
+            dcc.Graph(
+                id="plot-national",
+                figure=make_plot(gsp_id=0, show_yesterday=False),
+            ),
+        ],
+        style={"width": "95%"},
+    )
+
+    national_map = html.Div(
+        [
+            dcc.Graph(
+                id="plot-uk",
+                figure=make_map_plot(),
+            ),
+            modal,
+        ],
+        style={"width": "95%"},
+    )
+
+    tab1 = html.Div(
+        children=[
             # html.H3("Summary"),
             dcc.RadioItems(
                 id="radio-gsp-pv",
@@ -47,18 +68,13 @@ def make_layout():
             ),
             dbc.Row(
                 [
-                    dcc.Graph(
-                        id="plot-uk",
-                        figure=make_map_plot(),
-                        style={"width": "90%"},
-                    ),
-                    modal,
-                ]
+                    dbc.Col(html.Div(national_map)),
+                    dbc.Col(html.Div(national_plot)),
+                ],
             ),
-            dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
-            dcc.Graph(id="plot-national", figure=make_plot(gsp_id=0, show_yesterday=False)),
             dcc.Store(id="store-national", storage_type="memory"),
-        ]
+        ],
+        style={"height": "95vh"},
     )
 
     return tab1
