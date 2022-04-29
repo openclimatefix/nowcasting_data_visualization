@@ -1,8 +1,7 @@
 """ Make status layout """
 import logging
 
-import dash_bootstrap_components as dbc
-from dash import dash_table, dcc, html
+from dash import dash_table, html
 
 from .database import get_consumer_status
 
