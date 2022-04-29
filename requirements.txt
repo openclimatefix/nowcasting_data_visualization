@@ -9,6 +9,7 @@ plotly
 requests
 humanize
 xarray
+h5netcdf
 fsspec
 pathy
 nowcasting_datamodel==0.0.46
