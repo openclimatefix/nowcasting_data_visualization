@@ -35,7 +35,7 @@ def make_callbacks(app):
         [State("modal", "is_open"), State("plot-modal", "figure")],
     )
     def toggle_modal(click_data, close_button, is_open, fig):
-        """call back"""
+        """Call back for pop up GSP graph"""
         return toggle_modal_function(click_data, close_button, is_open, fig)
 
     return app
