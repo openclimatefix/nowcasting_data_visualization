@@ -10,7 +10,7 @@ from nowcasting_datamodel.models.pv import PVSystem, PVSystemSQL, PVYield
 
 @pytest.fixture
 def db_connection():
-    """ Database connection """
+    """Database connection"""
     url = "sqlite:///test.db"
     os.environ["DB_URL_PV"] = url
 
