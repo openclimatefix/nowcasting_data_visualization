@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 from dash import Input, Output, State
 
-from .plots import get_all_pv_systems_ids, make_pv_plot
+from .plots import make_pv_plot
 
 
 def pv_make_callbacks(app):
@@ -26,8 +26,8 @@ def pv_make_callbacks(app):
         State('store-pv-system-id','data')
     )
     def make_random_pv_systems_ids(n_clicks, all_pv_systems_ids):
-        # all_pv_systems_ids = get_all_pv_systems_ids()
-        random_choices = list(np.random.choice(len(get_all_pv_systems_ids()), 10))
+
+        random_choices = list(np.random.choice(len(all_pv_systems_ids), 10))
         init_pv_systems = np.array(all_pv_systems_ids)[random_choices]
 
         print(f"random chooses are {init_pv_systems}")
