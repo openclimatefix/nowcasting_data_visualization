@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_layout():
-    """ Make Summary layout """
+    """Make Summary layout"""
     modal = html.Div(
         [
             dbc.Modal(
