@@ -13,10 +13,11 @@ Things to do
 - auto refresh
 - colours and style
 - add data store, so data doesnt have to be reloaded
-- docker file
-- deploy on aws
 - tests for functions
 - tests for application
+- add status page
+- add nwp
+- add satellite
 
 ### Local pytest
 

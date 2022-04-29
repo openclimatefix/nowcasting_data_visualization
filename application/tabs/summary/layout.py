@@ -1,3 +1,4 @@
+""" Make summary layout """
 import logging
 
 import dash_bootstrap_components as dbc
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_layout():
-
+    """Make Summary layout"""
     modal = html.Div(
         [
             dbc.Modal(

@@ -1,15 +1,11 @@
 """Main plots function """
-import json
 import logging
 import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
-import geopandas as gpd
 import pandas as pd
-import requests
 from nowcasting_datamodel.connection import DatabaseConnection
-from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.pv import PVSystemSQL, PVYield, PVYieldSQL
 from nowcasting_datamodel.read.read_pv import get_pv_yield
@@ -17,14 +13,12 @@ from plotly import graph_objects as go
 
 logger = logging.getLogger(__name__)
 
-DB_URL_PV = os.getenv("DB_URL_PV")
-assert DB_URL_PV is not None, "DB_URL_PV has not been set"
-
 
 def get_all_pv_systems_ids() -> List[int]:
-
+    """Get all pv systems ids from database"""
     # make database connection
     url = os.getenv("DB_URL_PV")
+    assert url is not None, "DB_URL_PV has not been set"
     db_connection = DatabaseConnection(url=url, base=Base_PV)
 
     with db_connection.get_session() as session:
