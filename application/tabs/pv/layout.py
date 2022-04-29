@@ -1,3 +1,4 @@
+""" PV lyaout code """
 import logging
 
 import dash_bootstrap_components as dbc
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def pv_make_layout():
+    """ Make pv htm layout """
 
     all_pv_systems_ids = get_all_pv_systems_ids()
     random_choices = list(np.random.choice(len(get_all_pv_systems_ids()), 10))

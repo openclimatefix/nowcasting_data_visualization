@@ -22,7 +22,7 @@ assert DB_URL_PV is not None, "DB_URL_PV has not been set"
 
 
 def get_all_pv_systems_ids() -> List[int]:
-
+    """ Get all pv systems ids from database """
     # make database connection
     url = os.getenv("DB_URL_PV")
     db_connection = DatabaseConnection(url=url, base=Base_PV)
