@@ -33,7 +33,7 @@ warnings_and_errors = pd.DataFrame(
 
 
 def get_consumer_status() -> dict:
-    """ Get consumer status """
+    """Get consumer status"""
     url = os.getenv("DB_URL")
     assert url is not None, "DB_URL has not been set"
     db_connection = DatabaseConnection(url=url, base=Base_PV)

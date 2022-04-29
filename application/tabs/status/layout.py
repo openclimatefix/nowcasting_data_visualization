@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_status_layout():
-    """ Make html status page """
+    """Make html status page"""
     tab3 = html.Div(
         [
             html.H3("Data Consumers"),
