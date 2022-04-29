@@ -3,9 +3,8 @@ import logging
 from logging import config
 
 import dash_bootstrap_components as dbc
-from dash import Dash, Input, Output, dcc, html
-
 from auth import make_auth
+from dash import Dash, Input, Output, dcc, html
 from tabs.nwp.callbacks import nwp_make_callbacks
 from tabs.nwp.layout import nwp_make_layout
 from tabs.pv.callbacks import pv_make_callbacks
