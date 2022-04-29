@@ -42,14 +42,11 @@ def get_consumer_status() -> dict:
         input_data_last_updated = get_latest_input_data_last_updated(session=session)
         input_data_last_updated = InputDataLastUpdated.from_orm(input_data_last_updated)
 
-    print(input_data_last_updated.__dict__)
     input_data_last_updated_df = pd.DataFrame(
         input_data_last_updated.__dict__.items(), columns=["Consumer", "Last pulled"]
     )
 
     now = datetime.now(timezone.utc)
-    print(input_data_last_updated_df)
-    print(warnings_and_errors)
     input_data_last_updated_df = input_data_last_updated_df.merge(warnings_and_errors)
 
     index_warning = (
