@@ -7,4 +7,5 @@ pytest
 pytest-cov
 plotly
 requests
+humanize
 nowcasting_datamodel==0.0.46
