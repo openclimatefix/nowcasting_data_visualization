@@ -12,7 +12,7 @@ from tabs.summary.layout import make_layout
 logger = logging.getLogger(__name__)
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "0.0.11"
+version = "0.0.12"
 
 
 """Construct core Flask application with embedded Dash app."""
