@@ -6,11 +6,11 @@ from datetime import datetime, timedelta
 import numpy as np
 import pytest
 import xarray as xr
-from pathy import Pathy
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_Forecast, Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdatedSQL
 from nowcasting_datamodel.models.pv import PVSystem, PVSystemSQL, PVYield
+from pathy import Pathy
 
 
 @pytest.fixture
@@ -116,7 +116,7 @@ def pv_yields_and_systems(db_session):
 def nwp_data_filename():
     """Make fake nwp data"""
     with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
-        os.environ['NWP_AWS_PATH'] = str(Pathy(t.name).parent)
+        os.environ["NWP_AWS_PATH"] = str(Pathy(t.name).parent)
 
         # middle of the UK
         t0_datetime_utc = datetime.utcnow() - timedelta(hours=2)
