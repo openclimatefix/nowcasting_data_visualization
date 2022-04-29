@@ -155,7 +155,10 @@ def make_map_plot():
         mapbox_zoom=4.5,
         mapbox_center={"lat": 56, "lon": -2},
     )
-    fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 30}, height=700,)
+    fig.update_layout(
+        margin={"r": 0, "t": 30, "l": 0, "b": 30},
+        height=700,
+    )
     fig.update_layout(title=f"Solar Generation [MW]: {time.isoformat()}")
 
     print("Done making map plot")

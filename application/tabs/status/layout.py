@@ -2,7 +2,7 @@
 import logging
 
 import dash_bootstrap_components as dbc
-from dash import dcc, html, dash_table
+from dash import dash_table, dcc, html
 
 from .database import get_consumer_status
 
@@ -18,26 +18,17 @@ def make_status_layout():
                 id="table-status",
                 style_data_conditional=[
                     {
-                        'if': {
-                            'filter_query': '{Status} = "Warning"',
-                            'column_id': 'Status'
-                        },
+                        "if": {"filter_query": '{Status} = "Warning"', "column_id": "Status"},
                         "backgroundColor": "orange",
                         "color": "white",
                     },
                     {
-                        'if': {
-                            'filter_query': '{Status} = "Error"',
-                            'column_id': 'Status'
-                        },
+                        "if": {"filter_query": '{Status} = "Error"', "column_id": "Status"},
                         "backgroundColor": "red",
                         "color": "white",
                     },
                     {
-                        'if': {
-                            'filter_query': '{Status} = "Ok"',
-                            'column_id': 'Status'
-                        },
+                        "if": {"filter_query": '{Status} = "Ok"', "column_id": "Status"},
                         "backgroundColor": "green",
                         "color": "white",
                     },
