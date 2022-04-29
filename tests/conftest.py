@@ -46,14 +46,18 @@ def pv_yields_and_systems(db_session):
 
     # this pv systems has same coordiantes as the first gsp
     pv_system_sql_1: PVSystemSQL = PVSystem(
-        pv_system_id=1,
+        pv_system_id=10003,
         provider="pvoutput.org",
         status_interval_minutes=5,
         longitude=-1.293,
         latitude=51.76,
     ).to_orm()
     pv_system_sql_2: PVSystemSQL = PVSystem(
-        pv_system_id=2, provider="pvoutput.org", status_interval_minutes=5, longitude=0, latitude=56
+        pv_system_id=10020,
+        provider="pvoutput.org",
+        status_interval_minutes=5,
+        longitude=0,
+        latitude=56,
     ).to_orm()
 
     t0_datetime_utc = datetime.utcnow() - timedelta(hours=2)
