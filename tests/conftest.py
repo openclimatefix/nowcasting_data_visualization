@@ -1,8 +1,11 @@
 """ Setup for pytests """
 import os
+import tempfile
 from datetime import datetime, timedelta
 
+import numpy as np
 import pytest
+import xarray as xr
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_Forecast, Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdatedSQL
@@ -106,3 +109,49 @@ def pv_yields_and_systems(db_session):
         "pv_yields": pv_yield_sqls,
         "pv_systems": [pv_system_sql_1, pv_system_sql_2],
     }
+
+
+@pytest.fixture
+def nwp_data_filename():
+    """Make fake nwp data"""
+    with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
+        os.environ["NWP_AWS_FILENAME"] = t.name
+
+        # middle of the UK
+        t0_datetime_utc = datetime(2022, 1, 1)
+        image_size = 1000
+        time_steps = 10
+
+        ONE_KILOMETER = 10**3
+
+        # 4 kilometer spacing seemed about right for real satellite images
+        x = 2 * ONE_KILOMETER * np.array((range(0, image_size)))
+        y = 2 * ONE_KILOMETER * np.array((range(image_size, 0, -1)))
+
+        # time = pd.date_range(start=t0_datetime_utc, freq="30T", periods=10)
+        step = [timedelta(minutes=60 * i) for i in range(0, time_steps)]
+
+        coords = (
+            ("init_time", [t0_datetime_utc]),
+            ("variable", np.array(["dswrf"])),
+            ("step", step),
+            ("x", x),
+            ("y", y),
+        )
+
+        nwp = xr.DataArray(
+            abs(  # to make sure average is about 100
+                np.random.uniform(
+                    0,
+                    200,
+                    size=(1, 1, time_steps, image_size, image_size),
+                )
+            ),
+            coords=coords,
+            name="data",
+        )  # Fake data for testing!
+        nwp = nwp.to_dataset(name="UKV")
+
+        nwp.to_netcdf(t.name, engine="h5netcdf", mode="w")
+
+        yield t.name

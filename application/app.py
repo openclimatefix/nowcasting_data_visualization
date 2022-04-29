@@ -4,6 +4,8 @@ import logging
 import dash_bootstrap_components as dbc
 from auth import make_auth
 from dash import Dash, Input, Output, dcc, html
+from tabs.nwp.callbacks import nwp_make_callbacks
+from tabs.nwp.layout import nwp_make_layout
 from tabs.pv.callbacks import pv_make_callbacks
 from tabs.pv.layout import pv_make_layout
 from tabs.status.callbacks import make_status_callbacks
@@ -35,6 +37,7 @@ def make_app():
     tab_summary = make_layout()
     tab_pv = pv_make_layout()
     tab_status = make_status_layout()
+    tab_nwp = nwp_make_layout()
 
     app.layout = html.Div(
         children=[
@@ -46,6 +49,7 @@ def make_app():
                     dcc.Tab(label="Summary", value="tab-summary"),
                     dcc.Tab(label="Status", value="tab-status"),
                     dcc.Tab(label="PV", value="tab-pv"),
+                    dcc.Tab(label="NWP", value="tab-nwp"),
                 ],
             ),
             html.Div(id="tabs-content-example-graph"),
@@ -67,12 +71,16 @@ def make_app():
         elif tab == "tab-status":
             print("Making status tab")
             layout = tab_status
+        elif tab == "tab-nwp":
+            print("Making NWP tab")
+            layout = tab_nwp
         return layout
 
     # add other tab callbacks
     app = make_callbacks(app)
     app = pv_make_callbacks(app)
     app = make_status_callbacks(app)
+    app = nwp_make_callbacks(app)
 
     return app
 
