@@ -15,11 +15,9 @@ def make_status_callbacks(app):
     )
     def update_display_time_and_consumer_status(n):
         """Update consumer status and refresh time"""
-        print('update_display_time_and_consumer_status')
+        print("update_display_time_and_consumer_status")
         consumer_status = get_consumer_status()
-        now_text = datetime.now(timezone.utc).strftime(
-            'Refresh time: %Y-%m-%d %H:%M:%S  [UTC]'
-        )
+        now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
 
         return now_text, consumer_status
 

@@ -31,7 +31,7 @@ def make_app():
 
     make_auth(app)
 
-    #TODO make async to speed up
+    # TODO make async to speed up
     tab_summary = make_layout()
     tab_pv = pv_make_layout()
     tab_status = make_status_layout()
