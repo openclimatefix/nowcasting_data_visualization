@@ -38,7 +38,7 @@ def db_session(db_connection):
 
 @pytest.fixture()
 def input_data_last_updated(db_session):
-    """ Add InputDataLastUpdatedSQL to db"""
+    """Add InputDataLastUpdatedSQL to db"""
     input = InputDataLastUpdatedSQL(
         gsp=datetime(2022, 1, 1),
         nwp=datetime(2022, 1, 1),
