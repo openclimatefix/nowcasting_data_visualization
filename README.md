@@ -7,17 +7,13 @@ Dash visulization of nowcasting API
 
 
 Things to do
-- Do main layout
 - make into video
 - add auth
 - auto refresh
 - colours and style
 - add data store, so data doesnt have to be reloaded
-- tests for functions
-- tests for application
-- add status page
-- add nwp
 - add satellite
+- add refresh button on summary
 
 ### Local pytest
 
