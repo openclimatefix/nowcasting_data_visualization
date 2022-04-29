@@ -1,12 +1,11 @@
 """ Setup for pytests """
 import os
+import tempfile
 from datetime import datetime, timedelta
 
-import tempfile
 import numpy as np
-import xarray as xr
-
 import pytest
+import xarray as xr
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_Forecast, Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdatedSQL
@@ -112,10 +111,9 @@ def pv_yields_and_systems(db_session):
     }
 
 
-
 @pytest.fixture
 def nwp_data_filename():
-    """ Make fake nwp data """
+    """Make fake nwp data"""
     with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
 
         # middle of the UK
@@ -125,7 +123,7 @@ def nwp_data_filename():
         image_size = 1000
         time_steps = 10
 
-        ONE_KILOMETER = 10 ** 3
+        ONE_KILOMETER = 10**3
 
         # 4 kilometer spacing seemed about right for real satellite images
         x = 2 * ONE_KILOMETER * np.array((range(0, image_size)))

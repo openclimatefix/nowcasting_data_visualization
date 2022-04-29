@@ -1,12 +1,10 @@
 """ Make nwp plots """
-from plotly import graph_objects as go
-from typing import List
 from datetime import datetime
+from typing import List
 
 import pandas as pd
 import xarray as xr
-
-
+from plotly import graph_objects as go
 
 
 def make_slider(labels: List[str]) -> dict:
@@ -37,6 +35,7 @@ def make_slider(labels: List[str]) -> dict:
     ]
     return sliders
 
+
 def make_buttons() -> dict:
     """Make buttons Play and Pause"""
     return dict(
@@ -60,11 +59,11 @@ def make_buttons() -> dict:
 
 
 def plot_nwp_data(init_time, variable):
-    """ Plot nwp data"""
+    """Plot nwp data"""
 
     filename = "nwp_latest.netcdf"
 
-    print('Loading data')
+    print("Loading data")
     nwp_xr = xr.load_dataset(filename)["UKV"]
     nwp_xr = nwp_xr.sel(init_time=init_time)
     nwp_xr = nwp_xr.sel(variable=variable)
@@ -72,18 +71,18 @@ def plot_nwp_data(init_time, variable):
     # TODO
     # reproject to lat lon and put on coastline
 
-    print('Making nwp traces for animation')
+    print("Making nwp traces for animation")
     traces = []
     labels = []
     init_time = datetime.fromisoformat(init_time)
     for i in range(len(nwp_xr.step)):
-        traces.append(go.Heatmap(z=nwp_xr[i].values,zmin=0,zmax=1000))
+        traces.append(go.Heatmap(z=nwp_xr[i].values, zmin=0, zmax=1000))
         # do we need pandas here?
         step = pd.to_timedelta(nwp_xr.step[i].values)
         labels.append(init_time + step)
 
     # make animation
-    print('Making np figure')
+    print("Making np figure")
     fig = go.Figure(
         data=traces[0],
         layout=go.Layout(
@@ -105,5 +104,5 @@ def plot_nwp_data(init_time, variable):
         height=700,
     )
 
-    print('Done making nwp plot')
+    print("Done making nwp plot")
     return fig
