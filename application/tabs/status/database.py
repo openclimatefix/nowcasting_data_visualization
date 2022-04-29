@@ -13,7 +13,7 @@ from nowcasting_datamodel.read.read import get_latest_input_data_last_updated
 logger = logging.getLogger(__name__)
 
 
-pv_status = {"warning": timedelta(minutes=5), "error": timedelta(minutes=10)}
+pv_status = {"warning": timedelta(minutes=10), "error": timedelta(minutes=20)}
 
 gsp_status = {"warning": timedelta(minutes=30), "error": timedelta(days=1)}
 

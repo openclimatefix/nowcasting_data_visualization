@@ -6,6 +6,7 @@ from auth import make_auth
 from dash import Dash, Input, Output, dcc, html
 from tabs.pv.callbacks import pv_make_callbacks
 from tabs.pv.layout import pv_make_layout
+from tabs.status.callbacks import make_status_callbacks
 from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
@@ -30,6 +31,7 @@ def make_app():
 
     make_auth(app)
 
+    #TODO make async to speed up
     tab_summary = make_layout()
     tab_pv = pv_make_layout()
     tab_status = make_status_layout()
@@ -70,6 +72,7 @@ def make_app():
     # add other tab callbacks
     app = make_callbacks(app)
     app = pv_make_callbacks(app)
+    app = make_status_callbacks(app)
 
     return app
 
