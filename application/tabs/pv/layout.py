@@ -33,9 +33,7 @@ def pv_make_layout():
                 figure=make_pv_plot(),
                 style={"width": "50%"},
             ),
-            dcc.Store(id="store-pv-system-id",
-                      storage_type="memory",
-                      data=all_pv_systems_ids),
+            dcc.Store(id="store-pv-system-id", storage_type="memory", data=all_pv_systems_ids),
         ]
     )
 

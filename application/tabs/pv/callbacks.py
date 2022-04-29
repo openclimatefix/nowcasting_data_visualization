@@ -23,7 +23,7 @@ def pv_make_callbacks(app):
     @app.callback(
         Output("pv-dropdown", "value"),
         Input("pv-random", "n_clicks"),
-        State('store-pv-system-id','data')
+        State("store-pv-system-id", "data"),
     )
     def make_random_pv_systems_ids(n_clicks, all_pv_systems_ids):
 
