@@ -117,8 +117,6 @@ def nwp_data_filename():
     with tempfile.NamedTemporaryFile(suffix=".netcdf") as t:
 
         # middle of the UK
-        x_center_osgb = 500_000
-        y_center_osgb = 500_000
         t0_datetime_utc = datetime.utcnow() - timedelta(hours=2)
         image_size = 1000
         time_steps = 10

@@ -1,8 +1,6 @@
 """ Callbacks functions """
-from typing import List
 
-import numpy as np
-from dash import Input, Output, State
+from dash import Input, Output
 
 from .plots import plot_nwp_data
 
@@ -11,7 +9,8 @@ def nwp_make_callbacks(app):
     """Make callbacks"""
 
     # @app.callback(
-    #     [Output("nwp-dropdown-init-time", "options"), Output("nwp-dropdown-variables", "options")],
+    #     [Output("nwp-dropdown-init-time", "options"),
+    #     Output("nwp-dropdown-variables", "options")],
     #     Input("store-nwp-data", "data"),
     # )
     # def make_nwp_drop_downs(nwp_xr):

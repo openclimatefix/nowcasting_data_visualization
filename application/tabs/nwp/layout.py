@@ -2,7 +2,6 @@
 import logging
 
 import dash_bootstrap_components as dbc
-import numpy as np
 import pandas as pd
 import xarray as xr
 from dash import dcc, html
