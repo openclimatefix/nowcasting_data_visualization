@@ -13,6 +13,7 @@ def db_connection():
     """Database connection"""
     url = "sqlite:///test.db"
     os.environ["DB_URL_PV"] = url
+    os.environ["DB_URL"] = url
 
     connection = DatabaseConnection(url=url)
     Base_Forecast.metadata.create_all(connection.engine)
