@@ -13,14 +13,12 @@ from plotly import graph_objects as go
 
 logger = logging.getLogger(__name__)
 
-DB_URL_PV = os.getenv("DB_URL_PV")
-assert DB_URL_PV is not None, "DB_URL_PV has not been set"
-
 
 def get_all_pv_systems_ids() -> List[int]:
     """Get all pv systems ids from database"""
     # make database connection
     url = os.getenv("DB_URL_PV")
+    assert url is not None, "DB_URL_PV has not been set"
     db_connection = DatabaseConnection(url=url, base=Base_PV)
 
     with db_connection.get_session() as session:
