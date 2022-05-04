@@ -62,10 +62,11 @@ def make_buttons() -> dict:
     )
 
 
-def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.netcdf"):
+def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.netcdf"):
     """Plot nwp data"""
 
-    logger.debug("Loading data")
+    logger.debug(f"Plotting data {filename=}, {init_time=}, {variable=}")
+    print(filename)
     nwp_xr = xr.load_dataset(filename)["UKV"]
     init_time = datetime.fromisoformat(init_time)
 
