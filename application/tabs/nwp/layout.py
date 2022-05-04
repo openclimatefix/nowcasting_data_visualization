@@ -40,6 +40,13 @@ def nwp_make_layout():
                 id="nwp-dropdown-variables",
                 style={"width": "100%"},
             ),
+            html.Div(''),
+            dbc.Button("Refresh", id="nwp-refresh"),
+            dcc.Loading(
+                id="nwp-refresh-status",
+                type="default",
+                children=html.Div(id="loading-output-1")
+            ),
         ]
     )
 

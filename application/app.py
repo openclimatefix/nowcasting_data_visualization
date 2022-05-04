@@ -1,5 +1,6 @@
 """ Main app file """
 import logging
+import os
 from logging import config
 
 import dash_bootstrap_components as dbc
@@ -16,6 +17,7 @@ from tabs.summary.layout import make_layout
 
 config.fileConfig("./logging.config")
 logger = logging.getLogger(__name__)
+logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 version = "0.0.17"
@@ -76,6 +78,8 @@ def make_app():
         elif tab == "tab-nwp":
             print("Making NWP tab")
             layout = tab_nwp
+        logger.debug('Done making tab')
+        print('Done making tab')
         return layout
 
     # add other tab callbacks
