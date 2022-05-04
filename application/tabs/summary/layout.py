@@ -35,6 +35,11 @@ def make_layout():
 
     national_plot = html.Div(
         [
+            dbc.Button("Refresh", id="summary-refresh"),
+            dcc.Loading(
+                id="summary-refresh-status", type="default", children=html.Div(id="summary-loading-output-1")
+            ),
+            dcc.Interval(id="summary-interval", interval=1000 * 60 * 5),
             dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
             dcc.Graph(
                 id="plot-national",
