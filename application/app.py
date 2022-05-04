@@ -78,8 +78,8 @@ def make_app():
         elif tab == "tab-nwp":
             print("Making NWP tab")
             layout = tab_nwp
-        logger.debug('Done making tab')
-        print('Done making tab')
+        logger.debug("Done making tab")
+        print("Done making tab")
         return layout
 
     # add other tab callbacks
