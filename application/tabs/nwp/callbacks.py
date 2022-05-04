@@ -3,6 +3,7 @@
 import logging
 from datetime import datetime, timezone
 
+import pandas as pd
 import xarray as xr
 from dash import Input, Output
 
@@ -36,6 +37,8 @@ def nwp_make_callbacks(app):
         nwp_xr = xr.load_dataset("nwp_latest.netcdf")["UKV"]
         variables = nwp_xr["variable"].values
         init_times = nwp_xr.init_time.values
+
+        init_times = [pd.to_datetime(init_time).isoformat() for init_time in init_times]
 
         return init_times, variables
 
