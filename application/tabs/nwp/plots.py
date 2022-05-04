@@ -1,10 +1,14 @@
 """ Make nwp plots """
+
+import logging
 from datetime import datetime
 from typing import List, Optional
 
 import pandas as pd
 import xarray as xr
 from plotly import graph_objects as go
+
+logger = logging.getLogger(__name__)
 
 
 def make_slider(labels: List[str]) -> dict:
@@ -58,10 +62,11 @@ def make_buttons() -> dict:
     )
 
 
-def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.netcdf"):
+def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.netcdf"):
     """Plot nwp data"""
 
-    print("Loading data")
+    logger.debug(f"Plotting data {filename=}, {init_time=}, {variable=}")
+    print(filename)
     nwp_xr = xr.load_dataset(filename)["UKV"]
     init_time = datetime.fromisoformat(init_time)
 
@@ -71,7 +76,7 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.net
     # TODO
     # reproject to lat lon and put on coastline
 
-    print("Making nwp traces for animation")
+    logger.debug("Making nwp traces for animation")
     traces = []
     labels = []
     for i in range(len(nwp_xr.step)):
@@ -81,7 +86,7 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.net
         labels.append(init_time + step)
 
     # make animation
-    print("Making np figure")
+    logger.debug("Making np figure")
     fig = go.Figure(
         data=traces[0],
         layout=go.Layout(
@@ -103,5 +108,5 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "nwp_latest.net
         height=700,
     )
 
-    print("Done making nwp plot")
+    logger.debug("Done making nwp plot")
     return fig
