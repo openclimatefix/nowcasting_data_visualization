@@ -5,7 +5,7 @@ from logging import config
 
 import dash_bootstrap_components as dbc
 from auth import make_auth
-from dash import Dash, Input, Output, dcc, html
+from dash import Dash, dcc, html
 from tabs.nwp.callbacks import nwp_make_callbacks
 from tabs.nwp.layout import nwp_make_layout
 from tabs.pv.callbacks import pv_make_callbacks
@@ -50,37 +50,16 @@ def make_app():
                 id="tabs-example-graph",
                 value="tab-status",
                 children=[
-                    dcc.Tab(label="Summary", value="tab-summary"),
-                    dcc.Tab(label="Status", value="tab-status"),
-                    dcc.Tab(label="PV", value="tab-pv"),
-                    dcc.Tab(label="NWP", value="tab-nwp"),
+                    dcc.Tab(tab_summary, label="Summary", value="tab-summary"),
+                    dcc.Tab(tab_status, label="Status", value="tab-status"),
+                    dcc.Tab(tab_pv, label="PV", value="tab-pv"),
+                    dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
                 ],
             ),
-            html.Div(id="tabs-content-example-graph"),
+            # html.Div(id="tabs-content-example-graph"),
             html.Footer(f"version {version}", id="footer"),
         ]
     )
-
-    # call back to switch tabs
-    @app.callback(
-        Output("tabs-content-example-graph", "children"), Input("tabs-example-graph", "value")
-    )
-    def render_content(tab):
-        if tab == "tab-summary":
-            print("Making summary tab")
-            layout = tab_summary
-        elif tab == "tab-pv":
-            print("Making pv tab")
-            layout = tab_pv
-        elif tab == "tab-status":
-            print("Making status tab")
-            layout = tab_status
-        elif tab == "tab-nwp":
-            print("Making NWP tab")
-            layout = tab_nwp
-        logger.debug("Done making tab")
-        print("Done making tab")
-        return layout
 
     # add other tab callbacks
     app = make_callbacks(app)
