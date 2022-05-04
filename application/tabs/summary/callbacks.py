@@ -1,13 +1,14 @@
 """ Callbacks functions """
-from typing import List
 import logging
 from datetime import datetime, timezone
+from typing import List
 
 from dash import Input, Output, State
 
 from .plots import make_map_plot, make_plot
 
 logger = logging.getLogger(__name__)
+
 
 def make_callbacks(app):
     """Make callbacks"""
@@ -16,7 +17,7 @@ def make_callbacks(app):
         [Output("plot-uk", "figure"), Output("summary-refresh-status", "children")],
         [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals")],
     )
-    def refresh_trigger(n_clicks,n_intervals):
+    def refresh_trigger(n_clicks, n_intervals):
 
         logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=}")
 
