@@ -3,8 +3,8 @@
 import logging
 from datetime import datetime, timezone
 
-import xarray as xr
 import pandas as pd
+import xarray as xr
 from dash import Input, Output
 
 from .download import download_data
