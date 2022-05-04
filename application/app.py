@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "0.0.18"
+version = "0.0.19"
 
 
 """Construct core Flask application with embedded Dash app."""
