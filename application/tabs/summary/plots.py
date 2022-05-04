@@ -58,7 +58,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
 
     trace_in_day = go.Scatter(
         x=gsp_truths_in_day["datetime_utc"],
-        y=gsp_truths_in_day["solar_generation_kw"] / 10 ** 3,
+        y=gsp_truths_in_day["solar_generation_kw"] / 10**3,
         mode="lines",
         name="PV live Truth: in-day",
         line={"dash": "dash", "color": "blue"},
@@ -68,7 +68,7 @@ def make_plot(gsp_id: int = 0, show_yesterday: bool = True):
 
     trace_day_after = go.Scatter(
         x=gsp_truths_day_after["datetime_utc"],
-        y=gsp_truths_day_after["solar_generation_kw"] / 10 ** 3,
+        y=gsp_truths_day_after["solar_generation_kw"] / 10**3,
         mode="lines",
         name="PV live Truth: Day-After",
         line={"dash": "solid", "color": "blue"},
