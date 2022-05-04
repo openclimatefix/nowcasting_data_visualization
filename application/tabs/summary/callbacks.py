@@ -10,15 +10,6 @@ def make_callbacks(app):
     """Make callbacks"""
 
     @app.callback(
-        [Output("gsp-output-container", "children"), Output("plot-gsp", "figure")],
-        [Input("gsp-dropdown", "value")],
-    )
-    def update_output(gsp_value: str):
-        print(f"Updating GSP value {gsp_value}")
-        fig = make_plot(gsp_id=int(gsp_value), show_yesterday=True)
-        return f"You have selected {gsp_value}", fig
-
-    @app.callback(
         Output("plot-national", "figure"),
         Input("tick-show-yesterday", "value"),
         State("store-national", "data"),

@@ -56,31 +56,10 @@ def make_app():
                     dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
                 ],
             ),
-            html.Div(id="tabs-content-example-graph"),
+            # html.Div(id="tabs-content-example-graph"),
             html.Footer(f"version {version}", id="footer"),
         ]
     )
-
-    # call back to switch tabs
-    @app.callback(
-        Output("tabs-content-example-graph", "children"), Input("tabs-example-graph", "value")
-    )
-    def render_content(tab):
-        if tab == "tab-summary":
-            print("Making summary tab")
-            layout = tab_summary
-        elif tab == "tab-pv":
-            print("Making pv tab")
-            layout = tab_pv
-        elif tab == "tab-status":
-            print("Making status tab")
-            layout = tab_status
-        elif tab == "tab-nwp":
-            print("Making NWP tab")
-            layout = tab_nwp
-        logger.debug("Done making tab")
-        print("Done making tab")
-        return layout
 
     # add other tab callbacks
     app = make_callbacks(app)
