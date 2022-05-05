@@ -3,10 +3,9 @@ from typing import List
 
 import numpy as np
 from dash import Input, Output, State
+from log import logger
 
 from .plots import make_pv_plot
-
-from log import logger
 
 
 def pv_make_callbacks(app):
@@ -29,7 +28,7 @@ def pv_make_callbacks(app):
     )
     def make_random_pv_systems_ids(n_clicks, all_pv_systems_ids):
 
-        logger.debug('Making random choices')
+        logger.debug("Making random choices")
 
         random_choices = list(np.random.choice(len(all_pv_systems_ids), 10))
         init_pv_systems = np.array(all_pv_systems_ids)[random_choices]
