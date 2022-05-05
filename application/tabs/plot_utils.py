@@ -45,7 +45,7 @@ def make_buttons() -> dict:
     return dict(
         type="buttons",
         buttons=[
-            dict(label="Play", method="animate", args=[None], name='play-button'),
+            dict(label="Play", method="animate", args=[None], name="play-button"),
             dict(
                 args=[
                     [None],
@@ -60,4 +60,3 @@ def make_buttons() -> dict:
             ),
         ],
     )
-

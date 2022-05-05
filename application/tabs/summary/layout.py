@@ -19,9 +19,7 @@ def make_layout():
                     dbc.ModalBody(
                         [
                             html.H4(id="hover_info"),
-                            dcc.Graph(
-                                id="plot-modal", figure=make_plots(gsp_id=1)[0]
-                            ),
+                            dcc.Graph(id="plot-modal", figure=make_plots(gsp_id=1)[0]),
                         ]
                     ),
                     dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
@@ -56,7 +54,7 @@ def make_layout():
             dcc.Graph(
                 id="plot-map",
             ),
-            dcc.Interval(id="summary-slider-update", interval=1.5*1000),
+            dcc.Interval(id="summary-slider-update", interval=1.5 * 1000),
             modal,
         ],
         style={"width": "95%"},

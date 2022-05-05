@@ -38,7 +38,7 @@ def make_plots(gsp_id: int = 0):
     logger.debug(f"API request: forecast. Found {len(forecast)} data points")
 
     figs = []
-    for show_yesterday in [True,False]:
+    for show_yesterday in [True, False]:
 
         if not show_yesterday:
             logger.debug("Only showing todays results")
@@ -120,7 +120,9 @@ def make_map_plot():
     forecasts = ManyForecasts(**d)
 
     # format predictions
-    times = [forecast_value.target_time for forecast_value in forecasts.forecasts[1].forecast_values]
+    times = [
+        forecast_value.target_time for forecast_value in forecasts.forecasts[1].forecast_values
+    ]
     traces = []
     for i in range(len(times)):
         predictions = {
@@ -144,7 +146,8 @@ def make_map_plot():
         ).astype(str)
 
         # plot it
-        traces.append(go.Choroplethmapbox(
+        traces.append(
+            go.Choroplethmapbox(
                 geojson=shapes_dict,
                 locations=boundaries_and_results.index,
                 z=boundaries_and_results.value.round(0),

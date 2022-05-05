@@ -7,8 +7,7 @@ from typing import List, Optional
 import pandas as pd
 import xarray as xr
 from plotly import graph_objects as go
-
-from tabs.plot_utils import make_slider, make_buttons
+from tabs.plot_utils import make_buttons, make_slider
 
 logger = logging.getLogger(__name__)
 
