@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_gsp_boundaries() -> json:
-
-    print('Boundaries')
+    """ Get boundaries for gsp regions"""
 
     # get gsp boundaries
     logger.debug("Get gsp boundaries")
