@@ -8,7 +8,6 @@ import pandas as pd
 import xarray as xr
 from plotly import graph_objects as go
 
-
 logger = logging.getLogger(__name__)
 
 
