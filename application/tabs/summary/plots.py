@@ -3,7 +3,7 @@ import json
 import logging
 import os
 from datetime import datetime, timezone
-from typing import Union
+from typing import Optional, Union
 
 import geopandas as gpd
 import pandas as pd
@@ -15,6 +15,18 @@ API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
 
 logger = logging.getLogger(__name__)
+
+
+def get_gsp_boundaries() -> json:
+    """Get boundaries for gsp regions"""
+
+    # get gsp boundaries
+    logger.debug("Get gsp boundaries")
+    r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
+    d = r.json()
+    boundaries = gpd.GeoDataFrame.from_features(d["features"])
+
+    return boundaries.to_json()
 
 
 def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
@@ -123,14 +135,13 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
         return figs[0]
 
 
-def make_map_plot():
+def make_map_plot(boundaries: Optional = None):
     """Makes a list of map plot of forecast"""
 
     # get gsp boundaries
-    logger.debug("Get gsp boundaries")
-    r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
-    d = r.json()
-    boundaries = gpd.GeoDataFrame.from_features(d["features"])
+    if boundaries is None:
+        boundaries_dict = json.loads(get_gsp_boundaries())
+        boundaries = gpd.GeoDataFrame.from_features(boundaries_dict["features"])
 
     # get all forecast
     logger.debug("Get all gsp forecasts")
