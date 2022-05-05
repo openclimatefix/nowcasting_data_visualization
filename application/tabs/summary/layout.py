@@ -4,7 +4,7 @@ import logging
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from .plots import make_map_plot, make_plots
+from .plots import make_map_plot, make_plots, get_gsp_boundaries
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +80,7 @@ def make_layout():
             ),
             dcc.Store(id="store-national", storage_type="memory", data=make_plots()),
             dcc.Store(id="store-map-national", storage_type="memory", data=make_map_plot()),
+            dcc.Store(id="store-gsp-boundaries", storage_type="local", data=get_gsp_boundaries()),
         ],
         style={"height": "95vh"},
     )

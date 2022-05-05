@@ -41,13 +41,14 @@ def make_callbacks(app):
             Output("summary-refresh-status", "children"),
         ],
         [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals")],
+        State('store-gsp-boundaries','data')
     )
-    def refresh_trigger(n_clicks, n_intervals):
+    def refresh_trigger(n_clicks, n_intervals, boundaries):
 
         logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=}")
 
         national = make_plots()
-        national_map = make_map_plot()
+        national_map = make_map_plot(boundaries=boundaries)
 
         now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
         return national, national_map, f"Last refreshed at {now_text}"
