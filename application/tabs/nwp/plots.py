@@ -8,9 +8,58 @@ import pandas as pd
 import xarray as xr
 from plotly import graph_objects as go
 
-from tabs.plot_utils import make_slider, make_buttons
-
 logger = logging.getLogger(__name__)
+
+
+def make_slider(labels: List[str]) -> dict:
+    """Make slider for animation"""
+    sliders = [
+        dict(
+            steps=[
+                dict(
+                    method="animate",
+                    args=[
+                        [f"frame{k+1}"],
+                        dict(
+                            mode="immediate",
+                            frame=dict(duration=600, redraw=True),
+                            transition=dict(duration=200),
+                        ),
+                    ],
+                    label=f"{labels[k]}",
+                )
+                for k in range(0, len(labels))
+            ],
+            transition=dict(duration=100),
+            x=0,
+            y=0,
+            currentvalue=dict(font=dict(size=12), visible=True, xanchor="center"),
+            len=1.0,
+        )
+    ]
+    return sliders
+
+
+def make_buttons() -> dict:
+    """Make buttons Play and Pause"""
+    return dict(
+        type="buttons",
+        buttons=[
+            dict(label="Play", method="animate", args=[None], name="play-button"),
+            dict(
+                args=[
+                    [None],
+                    {
+                        "frame": {"duration": 0, "redraw": False},
+                        "mode": "immediate",
+                        "transition": {"duration": 0},
+                    },
+                ],
+                label="Pause",
+                method="animate",
+            ),
+        ],
+    )
 
 
 def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.netcdf"):
