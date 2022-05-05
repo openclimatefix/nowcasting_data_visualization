@@ -1,4 +1,5 @@
 """ Make summary layout """
+import os
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
@@ -56,7 +57,10 @@ def make_layout():
             dcc.Graph(
                 id="plot-map",
             ),
-            dcc.Interval(id="summary-slider-update", interval=2 * 1000),
+            dcc.Interval(
+                id="summary-slider-update",
+                interval=int(os.getenv("MAP_REFRESH_SECONDS", "5")) * 1000,
+            ),
             modal,
         ],
         style={"width": "95%"},
