@@ -1,6 +1,6 @@
+""" Logging utils"""
 import logging
 import os
-from logging import config
 
 
 def _get_logger():
