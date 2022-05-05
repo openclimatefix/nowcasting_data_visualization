@@ -123,6 +123,14 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
             xaxis_title="Time [UTC]",
             yaxis_title="Solar generation [MW]",
         )
+        fig.update_layout(legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ))
+
         figs.append(fig)
         logger.debug(f"Done making plot {option}")
 
