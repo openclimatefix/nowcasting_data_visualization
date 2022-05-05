@@ -7,10 +7,10 @@ import numpy as np
 import pytest
 import xarray as xr
 from nowcasting_datamodel.connection import DatabaseConnection
+from nowcasting_datamodel.fake import make_fake_forecast, make_fake_national_forecast
 from nowcasting_datamodel.models.base import Base_Forecast, Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdatedSQL
 from nowcasting_datamodel.models.pv import PVSystem, PVSystemSQL, PVYield
-from nowcasting_datamodel.fake import make_fake_forecast, make_fake_national_forecast
 
 
 @pytest.fixture
@@ -57,10 +57,10 @@ def input_data_last_updated(db_session):
 @pytest.fixture()
 def forecast(db_session):
     """Add InputDataLastUpdatedSQL to db"""
-    f1 = make_fake_forecast(session=db_session,gsp_id=1)
+    f1 = make_fake_forecast(session=db_session, gsp_id=1)
     f2 = make_fake_national_forecast()
 
-    db_session.add_all([f1,f2])
+    db_session.add_all([f1, f2])
     db_session.commit()
 
 
