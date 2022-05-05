@@ -4,7 +4,7 @@ import logging
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from .plots import make_map_plot, make_plot
+from .plots import make_map_plot, make_plots
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ def make_layout():
                         [
                             html.H4(id="hover_info"),
                             dcc.Graph(
-                                id="plot-modal", figure=make_plot(gsp_id=1, show_yesterday=False)
+                                id="plot-modal", figure=make_plots(gsp_id=1)[0]
                             ),
                         ]
                     ),
@@ -45,8 +45,8 @@ def make_layout():
             dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
             dcc.Graph(
                 id="plot-national",
-                figure=make_plot(gsp_id=0, show_yesterday=False),
             ),
+            # html.Iframe(src='./uk_map.html')
         ],
         style={"width": "95%"},
     )
@@ -54,9 +54,9 @@ def make_layout():
     national_map = html.Div(
         [
             dcc.Graph(
-                id="plot-uk",
-                figure=make_map_plot(),
+                id="plot-map",
             ),
+            dcc.Interval(id="summary-slider-update", interval=1.5*1000),
             modal,
         ],
         style={"width": "95%"},
@@ -64,7 +64,6 @@ def make_layout():
 
     tab1 = html.Div(
         children=[
-            # html.H3("Summary"),
             dcc.RadioItems(
                 id="radio-gsp-pv",
                 options=[
@@ -79,7 +78,8 @@ def make_layout():
                     dbc.Col(html.Div(national_plot)),
                 ],
             ),
-            dcc.Store(id="store-national", storage_type="memory"),
+            dcc.Store(id="store-national", storage_type="memory", data=make_plots()),
+            dcc.Store(id="store-map-national", storage_type="memory", data=make_map_plot()),
         ],
         style={"height": "95vh"},
     )

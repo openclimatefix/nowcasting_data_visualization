@@ -5,7 +5,7 @@ from typing import List
 
 from dash import Input, Output, State
 
-from .plots import make_map_plot, make_plot
+from .plots import make_map_plot, make_plots
 
 logger = logging.getLogger(__name__)
 
@@ -13,33 +13,59 @@ logger = logging.getLogger(__name__)
 def make_callbacks(app):
     """Make callbacks"""
 
+    # refresh map
     @app.callback(
-        [Output("plot-uk", "figure"), Output("summary-refresh-status", "children")],
+        Output("plot-map", "figure"),
+        Input("summary-slider-update", "n_intervals"),
+        State("store-map-national", "data"),
+    )
+    def refresh_map(n_intervals_slider, figs):
+
+        logger.debug(f"Refreshing summary map, {n_intervals_slider=}")
+
+        N = len(figs)
+        if n_intervals_slider is None:
+            i = 0
+        else:
+            i = n_intervals_slider % N
+
+        fig = figs[i]
+
+        return fig
+
+    # refresh data and national plot
+    @app.callback(
+        [
+            Output("store-national", "data"),
+            Output("store-map-national", "data"),
+            Output("summary-refresh-status", "children"),
+        ],
         [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals")],
     )
     def refresh_trigger(n_clicks, n_intervals):
 
         logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=}")
 
-        fig = make_map_plot()
+        national = make_plots()
+        national_map = make_map_plot()
 
         now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
-        return fig, f"Last refreshed at {now_text}"
+        return national, national_map, f"Last refreshed at {now_text}"
 
     @app.callback(
         Output("plot-national", "figure"),
-        Input("tick-show-yesterday", "value"),
-        State("store-national", "data"),
+        [Input("tick-show-yesterday", "value"),
+        Input("store-national", "data")],
     )
     def update_national_output(yesterday_value: List[str], store_national_data):
         print(f"Updating National plot, {yesterday_value=}")
-        show_yesterday = True if "Yesterday" in yesterday_value else False
-        fig = make_plot(gsp_id=0, show_yesterday=show_yesterday)
+        show_yesterday = 0 if "Yesterday" in yesterday_value else 1
+        fig = store_national_data[show_yesterday]
         return fig
 
     @app.callback(
         [Output("modal", "is_open"), Output("plot-modal", "figure")],
-        [Input("plot-uk", "clickData"), Input("close", "n_clicks")],
+        [Input("plot-map", "clickData"), Input("close", "n_clicks")],
         [State("modal", "is_open"), State("plot-modal", "figure")],
     )
     def toggle_modal(click_data, close_button, is_open, fig):
@@ -70,7 +96,7 @@ def toggle_modal_function(click_data, close_button, is_open, fig):
 
         print("Making plot")
         gsp_id = int(click_data["points"][0]["pointNumber"] + 1)
-        fig = make_plot(gsp_id=gsp_id, show_yesterday=False)
+        fig = make_plots(gsp_id=gsp_id)[1]
     else:
         print("Not making plot, probably because we are closing the window down")
         fig = None

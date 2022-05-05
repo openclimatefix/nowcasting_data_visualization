@@ -1,8 +1,8 @@
-from tabs.summary.plots import make_map_plot, make_plot
+from tabs.summary.plots import make_map_plot, make_plots
 
 
 def test_make_plot():
-    make_plot(gsp_id=1, show_yesterday=False)
+    make_plots(gsp_id=1)
 
 
 def test_make_map_plot():
