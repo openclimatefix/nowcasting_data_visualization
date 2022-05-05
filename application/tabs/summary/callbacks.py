@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 from typing import List
 
 from dash import Input, Output, State
-from log import logger
 from dash.dependencies import ClientsideFunction
+from log import logger
 
 from .plots import make_map_plot, make_plots
 
