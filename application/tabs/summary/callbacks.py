@@ -29,7 +29,7 @@ def make_callbacks(app):
 
         fig = figs[i]
 
-        logger.debug(f"Refreshing summary map: done")
+        logger.debug("Refreshing summary map: done")
 
         return fig
 
