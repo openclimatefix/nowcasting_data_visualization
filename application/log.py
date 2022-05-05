@@ -4,7 +4,7 @@ from logging import config
 
 
 def _get_logger():
-    """ Create a logger """
+    """Create a logger"""
     # create logger
     logger = logging.getLogger("Data vis")
     logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
