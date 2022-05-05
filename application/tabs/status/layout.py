@@ -11,22 +11,22 @@ def make_status_layout():
 
     now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
     style_data_conditional = [
-                    {
-                        "if": {"filter_query": '{Status} = "Warning"', "column_id": "Status"},
-                        "backgroundColor": "orange",
-                        "color": "white",
-                    },
-                    {
-                        "if": {"filter_query": '{Status} = "Error"', "column_id": "Status"},
-                        "backgroundColor": "red",
-                        "color": "white",
-                    },
-                    {
-                        "if": {"filter_query": '{Status} = "Ok"', "column_id": "Status"},
-                        "backgroundColor": "green",
-                        "color": "white",
-                    },
-                ]
+        {
+            "if": {"filter_query": '{Status} = "Warning"', "column_id": "Status"},
+            "backgroundColor": "orange",
+            "color": "white",
+        },
+        {
+            "if": {"filter_query": '{Status} = "Error"', "column_id": "Status"},
+            "backgroundColor": "red",
+            "color": "white",
+        },
+        {
+            "if": {"filter_query": '{Status} = "Ok"', "column_id": "Status"},
+            "backgroundColor": "green",
+            "color": "white",
+        },
+    ]
 
     tab3 = html.Div(
         [
@@ -34,13 +34,13 @@ def make_status_layout():
             dash_table.DataTable(
                 data=get_consumer_status(),
                 id="pv-table-status",
-                style_data_conditional=style_data_conditional
+                style_data_conditional=style_data_conditional,
             ),
             html.H3("Forecasts"),
             dash_table.DataTable(
                 data=get_forecast_status(),
                 id="table-status-forecast",
-                style_data_conditional=style_data_conditional
+                style_data_conditional=style_data_conditional,
             ),
             html.Div(now_text, id="pv-refresh-datetime"),
             dcc.Interval(id="pv-interval", interval=30000),

@@ -8,8 +8,8 @@ from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdated
 from nowcasting_datamodel.read.read import (
-    get_latest_input_data_last_updated,
     get_latest_forecast_created_utc,
+    get_latest_input_data_last_updated,
 )
 
 pv_status = {"warning": timedelta(minutes=10), "error": timedelta(minutes=20)}
