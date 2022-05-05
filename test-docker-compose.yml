@@ -1,14 +1,27 @@
 version: "3"
 
 services:
+  postgres:
+    image: postgres:14.2
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
   nowcasting_data_visualization:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         TESTING: 1
+    depends_on:
+      - "postgres"
     environment:
       - API_URL=$API_URL
+      - DB_URL=postgresql://postgres:postgres@postgres:5432/postgres
+      - DB_URL_PV=postgresql://postgres:postgres@postgres:5432/postgres
     command: >
       bash -c "pytest --cov=./application
       && coverage report -m

@@ -16,9 +16,7 @@ from nowcasting_datamodel.fake import make_fake_forecast, make_fake_national_for
 @pytest.fixture
 def db_connection():
     """Database connection"""
-    url = "sqlite:///test.db"
-    os.environ["DB_URL_PV"] = url
-    os.environ["DB_URL"] = url
+    url = os.environ["DB_URL"]
 
     connection = DatabaseConnection(url=url)
     Base_Forecast.metadata.create_all(connection.engine)
