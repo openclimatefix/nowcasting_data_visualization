@@ -54,8 +54,7 @@ def make_callbacks(app):
 
     @app.callback(
         Output("plot-national", "figure"),
-        [Input("tick-show-yesterday", "value"),
-        Input("store-national", "data")],
+        [Input("tick-show-yesterday", "value"), Input("store-national", "data")],
     )
     def update_national_output(yesterday_value: List[str], store_national_data):
         print(f"Updating National plot, {yesterday_value=}")
