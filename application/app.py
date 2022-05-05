@@ -2,7 +2,6 @@
 import logging
 import os
 from logging import config
-
 import dash_bootstrap_components as dbc
 from auth import make_auth
 from dash import Dash, dcc, html
@@ -14,13 +13,18 @@ from tabs.status.callbacks import make_status_callbacks
 from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
+import sys
+import logging
+from log import logger
 
-config.fileConfig("./logging.config")
-logger = logging.getLogger(__name__)
-logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
+
+# logging.getLogger("app").setLevel('DEBUG')
+# logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 version = "0.0.25"
+logger.debug(f'Running {version} of Data visulization ')
+print(version)
 
 
 """Construct core Flask application with embedded Dash app."""

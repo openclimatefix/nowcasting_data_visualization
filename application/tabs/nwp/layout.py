@@ -8,7 +8,7 @@ from dash import dcc, html
 
 from .download import download_data
 
-logger = logging.getLogger(__name__)
+from log import logger
 
 
 def nwp_make_layout():

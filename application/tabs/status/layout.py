@@ -6,8 +6,7 @@ from dash import dash_table, dcc, html
 
 from .database import get_consumer_status
 
-logger = logging.getLogger(__name__)
-
+from log import logger
 
 def make_status_layout():
     """Make html status page"""

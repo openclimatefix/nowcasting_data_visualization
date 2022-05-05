@@ -10,7 +10,7 @@ from dash import Input, Output
 from .download import download_data
 from .plots import plot_nwp_data
 
-logger = logging.getLogger(__name__)
+from log import logger
 
 
 def nwp_make_callbacks(app):

@@ -7,7 +7,7 @@ from dash import dcc, html
 
 from .plots import get_all_pv_systems_ids, make_pv_plot
 
-logger = logging.getLogger(__name__)
+from log import logger
 
 
 def pv_make_layout():

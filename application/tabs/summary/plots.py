@@ -14,14 +14,15 @@ from plotly import graph_objects as go
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
 
-logger = logging.getLogger(__name__)
-
+from log import logger
 
 def get_gsp_boundaries() -> json:
     """Get boundaries for gsp regions"""
 
+    filename='./gsp_bounadries.json'
+
     # get gsp boundaries
-    logger.debug("Get gsp boundaries")
+    logger.info("Get gsp boundaries")
     r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
