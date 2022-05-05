@@ -3,10 +3,10 @@ import logging
 from datetime import datetime, timezone
 
 from dash import dash_table, dcc, html
+from log import logger
 
 from .database import get_consumer_status
 
-from log import logger
 
 def make_status_layout():
     """Make html status page"""

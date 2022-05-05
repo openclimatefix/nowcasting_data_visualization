@@ -14,11 +14,10 @@ VALID_USERNAME_PASSWORD_PAIRS = {os.getenv("USERNAME", "hello"): os.getenv("WORD
 from log import logger
 
 
-
 def make_auth(app):
     """Add auth to app"""
 
-    logger.debug('Add auth to app')
+    logger.debug("Add auth to app")
 
     dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 
