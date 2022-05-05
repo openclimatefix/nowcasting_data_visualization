@@ -4,7 +4,7 @@ import logging
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from .plots import make_map_plot, make_plots, get_gsp_boundaries
+from .plots import get_gsp_boundaries, make_map_plot, make_plots
 
 logger = logging.getLogger(__name__)
 

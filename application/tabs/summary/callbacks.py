@@ -41,7 +41,7 @@ def make_callbacks(app):
             Output("summary-refresh-status", "children"),
         ],
         [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals")],
-        State('store-gsp-boundaries','data')
+        State("store-gsp-boundaries", "data"),
     )
     def refresh_trigger(n_clicks, n_intervals, boundaries):
 
