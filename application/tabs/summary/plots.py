@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
+from tabs.plot_utils import make_slider, make_buttons
 
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
@@ -116,42 +117,50 @@ def make_map_plot():
     forecasts = ManyForecasts(**d)
 
     # format predictions
-    time = forecasts.forecasts[1].forecast_values[0].target_time
-    predictions = {
-        f.location.gsp_id: f.forecast_values[0].expected_power_generation_megawatts
-        for f in forecasts.forecasts
-    }
-    predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
+    times = [forecast_value.target_time for forecast_value in forecasts.forecasts[1].forecast_values]
+    traces = []
+    for i in range(len(times)):
+        predictions = {
+            f.location.gsp_id: f.forecast_values[i].expected_power_generation_megawatts
+            for f in forecasts.forecasts
+        }
+        predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
 
-    boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
+        boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
 
-    #  plot
-    boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
-    boundaries_and_results.set_index("gsp_name", inplace=True)
+        #  plot
+        boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
+        boundaries_and_results.set_index("gsp_name", inplace=True)
 
-    # make shape dict for plotting
-    shapes_dict = json.loads(boundaries_and_results.to_json())
+        # make shape dict for plotting
+        shapes_dict = json.loads(boundaries_and_results.to_json())
 
-    # make label
-    boundaries_and_results["label"] = " GSP id:" + boundaries_and_results["gsp_id"].astype(
-        int
-    ).astype(str)
+        # make label
+        boundaries_and_results["label"] = " GSP id:" + boundaries_and_results["gsp_id"].astype(
+            int
+        ).astype(str)
 
-    # plot it
-    fig = go.Figure(
-        data=go.Choroplethmapbox(
-            geojson=shapes_dict,
-            locations=boundaries_and_results.index,
-            z=boundaries_and_results.value.round(0),
-            colorscale="solar",
-            # hoverinfo=trace,
-            hovertext=boundaries_and_results["label"].tolist(),
-            name=None,
-            zmax=500,
-            zmin=0,
-            marker={"opacity": 0.5},
+        # plot it
+        traces.append(go.Choroplethmapbox(
+                geojson=shapes_dict,
+                locations=boundaries_and_results.index,
+                z=boundaries_and_results.value.round(0),
+                colorscale="solar",
+                # hoverinfo=trace,
+                hovertext=boundaries_and_results["label"].tolist(),
+                name=None,
+                zmax=500,
+                zmin=0,
+                marker={"opacity": 0.5},
+            )
         )
-    )
+
+    fig = go.Figure(data=traces[0])
+    frames = []
+    for i, trace in enumerate(traces):
+        frames.append(go.Frame(data=trace, name=f"frame{i + 1}"))
+
+    fig.update(frames=frames)
 
     fig.update_layout(
         mapbox_style="carto-positron",
@@ -162,7 +171,10 @@ def make_map_plot():
         margin={"r": 0, "t": 30, "l": 0, "b": 30},
         height=700,
     )
-    fig.update_layout(title=f"Solar Generation [MW]: {time.isoformat()}")
+    fig.update_layout(title=f"Solar Generation [MW]: {times[0].isoformat()}")
+    fig.update_layout(updatemenus=[make_buttons()])
+    sliders = make_slider(labels=times)
+    fig.update_layout(sliders=sliders)
 
     logger.debug("Done making map plot")
     return fig
