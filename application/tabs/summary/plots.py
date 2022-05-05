@@ -17,7 +17,7 @@ assert API_URL is not None, "API_URL has not been set"
 logger = logging.getLogger(__name__)
 
 
-def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = 'both'):
+def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
     """
     Make true and forecast plots
 
@@ -47,7 +47,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = 'both'):
     logger.debug(f"API request: forecast. Found {len(forecast)} data points")
 
     figs = []
-    if show_yesterday == 'both':
+    if show_yesterday == "both":
         options = [True, False]
     else:
         options = [show_yesterday]
@@ -117,7 +117,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = 'both'):
         logger.debug(f"Done making plot {option}")
 
     logger.debug("Done making plot")
-    if show_yesterday == 'both':
+    if show_yesterday == "both":
         return figs
     else:
         return figs[0]
