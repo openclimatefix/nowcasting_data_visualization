@@ -59,7 +59,7 @@ def make_layout():
             ),
             dcc.Interval(
                 id="summary-slider-update",
-                interval=int(os.getenv("MAP_REFRESH_SECONDS", "5")) * 1000,
+                interval=int(os.getenv("MAP_REFRESH_SECONDS", "3")) * 1000,
             ),
             modal,
         ],

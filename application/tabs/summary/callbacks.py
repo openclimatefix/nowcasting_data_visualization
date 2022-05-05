@@ -11,27 +11,18 @@ from .plots import make_map_plot, make_plots
 def make_callbacks(app):
     """Make callbacks"""
 
-    # refresh map
-    @app.callback(
+    app.clientside_callback(
+        """
+        function(n_intervals, data) {
+            let N = data.length
+            i = n_intervals % N
+            return data[i]
+            }
+        """,
         Output("plot-map", "figure"),
         Input("summary-slider-update", "n_intervals"),
         State("store-map-national", "data"),
     )
-    def refresh_map(n_intervals_slider, figs):
-
-        logger.debug(f"Refreshing summary map, {n_intervals_slider=}")
-
-        N = len(figs)
-        if n_intervals_slider is None:
-            i = 0
-        else:
-            i = n_intervals_slider % N
-
-        fig = figs[i]
-
-        logger.debug("Refreshing summary map: done")
-
-        return fig
 
     # refresh data and national plot
     @app.callback(
