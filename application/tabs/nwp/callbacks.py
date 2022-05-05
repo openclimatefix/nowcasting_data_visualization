@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 import pandas as pd
 import xarray as xr
 from dash import Input, Output
-
 from log import logger
 
 from .download import download_data
