@@ -1,6 +1,5 @@
 """Main plots function """
 import json
-import logging
 import os
 from datetime import datetime, timezone
 from typing import Optional, Union
@@ -11,16 +10,14 @@ import requests
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
+from log import logger
+
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
-
-from log import logger
 
 
 def get_gsp_boundaries() -> json:
     """Get boundaries for gsp regions"""
-
-    filename = "./gsp_bounadries.json"
 
     # get gsp boundaries
     logger.info("Get gsp boundaries")
@@ -90,7 +87,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
 
         trace_in_day = go.Scatter(
             x=gsp_truths_in_day["datetime_utc"],
-            y=gsp_truths_in_day["solar_generation_kw"] / 10**3,
+            y=gsp_truths_in_day["solar_generation_kw"] / 10 ** 3,
             mode="lines",
             name="PV live Truth: in-day",
             line={"dash": "dash", "color": "blue"},
@@ -100,7 +97,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
 
         trace_day_after = go.Scatter(
             x=gsp_truths_day_after["datetime_utc"],
-            y=gsp_truths_day_after["solar_generation_kw"] / 10**3,
+            y=gsp_truths_day_after["solar_generation_kw"] / 10 ** 3,
             mode="lines",
             name="PV live Truth: Day-After",
             line={"dash": "solid", "color": "blue"},

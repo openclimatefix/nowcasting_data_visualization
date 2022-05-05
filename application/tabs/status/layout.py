@@ -1,9 +1,7 @@
 """ Make status layout """
-import logging
 from datetime import datetime, timezone
 
 from dash import dash_table, dcc, html
-from log import logger
 
 from .database import get_consumer_status
 

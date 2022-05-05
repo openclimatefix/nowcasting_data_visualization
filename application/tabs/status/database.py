@@ -1,11 +1,9 @@
 """Database functions for status """
-import logging
 import os
 from datetime import datetime, timedelta, timezone
 
 import humanize
 import pandas as pd
-from log import logger
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdated

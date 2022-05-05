@@ -1,11 +1,9 @@
 """ PV lyaout code """
-import logging
 
 import dash_bootstrap_components as dbc
 import pandas as pd
 import xarray as xr
 from dash import dcc, html
-from log import logger
 
 from .download import download_data
 
