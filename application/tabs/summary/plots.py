@@ -140,7 +140,10 @@ def make_map_plot(boundaries: Optional = None):
 
     # get gsp boundaries
     if boundaries is None:
-        boundaries_dict = json.loads(get_gsp_boundaries())
+        boundaries = get_gsp_boundaries()
+
+    if isinstance(boundaries, str):
+        boundaries_dict = json.loads(boundaries)
         boundaries = gpd.GeoDataFrame.from_features(boundaries_dict["features"])
 
     # get all forecast
