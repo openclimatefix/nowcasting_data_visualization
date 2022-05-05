@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 def make_layout():
     """Make Summary layout"""
+
+    boundaries = get_gsp_boundaries()
+
     modal = html.Div(
         [
             dbc.Modal(
@@ -79,8 +82,12 @@ def make_layout():
                 ],
             ),
             dcc.Store(id="store-national", storage_type="memory", data=make_plots()),
-            dcc.Store(id="store-map-national", storage_type="memory", data=make_map_plot()),
-            dcc.Store(id="store-gsp-boundaries", storage_type="memory", data=get_gsp_boundaries()),
+            dcc.Store(
+                id="store-map-national",
+                storage_type="memory",
+                data=make_map_plot(boundaries=boundaries),
+            ),
+            dcc.Store(id="store-gsp-boundaries", storage_type="memory", data=boundaries),
         ],
         style={"height": "95vh"},
     )
