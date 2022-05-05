@@ -7,7 +7,7 @@ def _get_logger():
     # config.fileConfig("./logging.config")
 
     # create logger
-    logger = logging.getLogger('Data vis')
+    logger = logging.getLogger("Data vis")
     logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 
     # create console handler and set level to debug
@@ -15,7 +15,9 @@ def _get_logger():
     ch.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 
     # create formatter
-    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(module)s : %(funcName)s : %(lineno)d : %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s : %(levelname)s : %(module)s : %(funcName)s : %(lineno)d : %(message)s"
+    )
 
     # add formatter to ch
     ch.setFormatter(formatter)
@@ -24,5 +26,6 @@ def _get_logger():
     logger.addHandler(ch)
 
     return logger
+
 
 logger = _get_logger()

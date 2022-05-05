@@ -4,10 +4,9 @@ from datetime import datetime, timezone
 from typing import List
 
 from dash import Input, Output, State
+from log import logger
 
 from .plots import make_map_plot, make_plots
-
-from log import logger
 
 
 def make_callbacks(app):

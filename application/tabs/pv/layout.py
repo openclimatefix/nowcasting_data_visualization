@@ -4,10 +4,9 @@ import logging
 import dash_bootstrap_components as dbc
 import numpy as np
 from dash import dcc, html
+from log import logger
 
 from .plots import get_all_pv_systems_ids, make_pv_plot
-
-from log import logger
 
 
 def pv_make_layout():

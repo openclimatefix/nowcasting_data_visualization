@@ -5,13 +5,11 @@ from datetime import datetime, timedelta, timezone
 
 import humanize
 import pandas as pd
+from log import logger
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdated
 from nowcasting_datamodel.read.read import get_latest_input_data_last_updated
-
-from log import logger
-
 
 pv_status = {"warning": timedelta(minutes=10), "error": timedelta(minutes=20)}
 

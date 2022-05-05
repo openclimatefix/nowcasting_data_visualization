@@ -16,10 +16,11 @@ assert API_URL is not None, "API_URL has not been set"
 
 from log import logger
 
+
 def get_gsp_boundaries() -> json:
     """Get boundaries for gsp regions"""
 
-    filename='./gsp_bounadries.json'
+    filename = "./gsp_bounadries.json"
 
     # get gsp boundaries
     logger.info("Get gsp boundaries")

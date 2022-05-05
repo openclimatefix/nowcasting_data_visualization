@@ -5,10 +5,9 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import xarray as xr
 from dash import dcc, html
+from log import logger
 
 from .download import download_data
-
-from log import logger
 
 
 def nwp_make_layout():
