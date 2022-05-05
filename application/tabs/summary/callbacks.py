@@ -30,6 +30,8 @@ def make_callbacks(app):
 
         fig = figs[i]
 
+        logger.debug(f"Refreshing summary map: done")
+
         return fig
 
     # refresh data and national plot

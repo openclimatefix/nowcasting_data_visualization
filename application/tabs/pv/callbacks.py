@@ -6,6 +6,8 @@ from dash import Input, Output, State
 
 from .plots import make_pv_plot
 
+from log import logger
+
 
 def pv_make_callbacks(app):
     """Make callbacks"""
@@ -15,9 +17,9 @@ def pv_make_callbacks(app):
         Input("pv-dropdown", "value"),
     )
     def update_pv_plot(pv_system_id: List[int]):
-        print(f"Updating PV plot with pv system {pv_system_id}")
+        logger.info(f"Updating PV plot with pv system {pv_system_id}")
         fig = make_pv_plot(pv_systems_ids=pv_system_id)
-        print("Updating PV plot: done")
+        logger.debug("Updating PV plot: done")
         return fig
 
     @app.callback(
@@ -27,10 +29,12 @@ def pv_make_callbacks(app):
     )
     def make_random_pv_systems_ids(n_clicks, all_pv_systems_ids):
 
+        logger.debug('Making random choices')
+
         random_choices = list(np.random.choice(len(all_pv_systems_ids), 10))
         init_pv_systems = np.array(all_pv_systems_ids)[random_choices]
 
-        print(f"random chooses are {init_pv_systems}")
+        logger.debug(f"random chooses are {init_pv_systems}")
 
         return init_pv_systems
 
