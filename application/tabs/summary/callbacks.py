@@ -95,7 +95,7 @@ def toggle_modal_function(click_data, close_button, is_open, fig):
 
         print("Making plot")
         gsp_id = int(click_data["points"][0]["pointNumber"] + 1)
-        fig = make_plots(gsp_id=gsp_id)[1]
+        fig = make_plots(gsp_id=gsp_id, show_yesterday=False)
     else:
         print("Not making plot, probably because we are closing the window down")
         fig = None

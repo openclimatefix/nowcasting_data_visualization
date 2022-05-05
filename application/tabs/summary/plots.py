@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from datetime import datetime, timezone
+from typing import Union
 
 import geopandas as gpd
 import pandas as pd
@@ -16,9 +17,17 @@ assert API_URL is not None, "API_URL has not been set"
 logger = logging.getLogger(__name__)
 
 
-def make_plots(gsp_id: int = 0):
-    """Make true and forecast plots"""
-    logger.info(f"Making plot for gsp {gsp_id}")
+def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = 'both'):
+    """
+    Make true and forecast plots
+
+    :param gsp_id: gsp id number
+    :param show_yesterday: option to show yesterday results or not.
+    If 'both' is used, then both plots that include yesterday and not are returned
+    :return: figure, or list of figures
+    """
+
+    logger.info(f"Making plot for gsp {gsp_id}, {show_yesterday=}")
     logger.debug("API request: day after")
     response = requests.get(f"{API_URL}/v0/GB/solar/gsp/truth/one_gsp/{gsp_id}/?regime=day-after")
     r = response.json()
@@ -38,9 +47,13 @@ def make_plots(gsp_id: int = 0):
     logger.debug(f"API request: forecast. Found {len(forecast)} data points")
 
     figs = []
-    for show_yesterday in [True, False]:
+    if show_yesterday == 'both':
+        options = [True, False]
+    else:
+        options = [show_yesterday]
+    for option in options:
 
-        if not show_yesterday:
+        if not option:
             logger.debug("Only showing todays results")
             today_start_datetime = datetime.now(timezone.utc)
             today_start_datetime = today_start_datetime.replace(
@@ -56,6 +69,8 @@ def make_plots(gsp_id: int = 0):
             ]
 
             logger.debug("Done filtering data")
+        else:
+            logger.debug("showing yesterday results too")
 
         logger.debug(f"Making trace for in day with {len(gsp_truths_in_day)} data points")
 
@@ -99,9 +114,13 @@ def make_plots(gsp_id: int = 0):
             yaxis_title="Solar generation [MW]",
         )
         figs.append(fig)
+        logger.debug(f"Done making plot {option}")
 
     logger.debug("Done making plot")
-    return figs
+    if show_yesterday == 'both':
+        return figs
+    else:
+        return figs[0]
 
 
 def make_map_plot():

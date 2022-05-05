@@ -19,7 +19,7 @@ def make_layout():
                     dbc.ModalBody(
                         [
                             html.H4(id="hover_info"),
-                            dcc.Graph(id="plot-modal", figure=make_plots(gsp_id=1)[0]),
+                            dcc.Graph(id="plot-modal", figure=make_plots(gsp_id=1, show_yesterday=False)),
                         ]
                     ),
                     dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
