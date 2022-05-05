@@ -1,12 +1,9 @@
 """ Make summary layout """
-import logging
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
 from .plots import get_gsp_boundaries, make_map_plot, make_plots
-
-logger = logging.getLogger(__name__)
 
 
 def make_layout():
@@ -59,7 +56,7 @@ def make_layout():
             dcc.Graph(
                 id="plot-map",
             ),
-            dcc.Interval(id="summary-slider-update", interval=1.5 * 1000),
+            dcc.Interval(id="summary-slider-update", interval=2 * 1000),
             modal,
         ],
         style={"width": "95%"},

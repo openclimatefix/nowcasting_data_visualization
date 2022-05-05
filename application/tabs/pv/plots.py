@@ -1,17 +1,15 @@
 """Main plots function """
-import logging
 import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
 import pandas as pd
+from log import logger
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.pv import PVSystemSQL, PVYield, PVYieldSQL
 from nowcasting_datamodel.read.read_pv import get_pv_yield
 from plotly import graph_objects as go
-
-logger = logging.getLogger(__name__)
 
 
 def get_all_pv_systems_ids() -> List[int]:

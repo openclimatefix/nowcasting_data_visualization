@@ -1,11 +1,9 @@
 """ Download nwp data """
-import logging
 import os
 from typing import Optional
 
 import fsspec
-
-logger = logging.getLogger(__name__)
+from log import logger
 
 
 def download_data(replace: bool = False, local_filename: Optional[str] = "nwp_latest.netcdf"):

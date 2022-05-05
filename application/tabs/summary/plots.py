@@ -1,6 +1,5 @@
 """Main plots function """
 import json
-import logging
 import os
 from datetime import datetime, timezone
 from typing import Optional, Union
@@ -8,20 +7,19 @@ from typing import Optional, Union
 import geopandas as gpd
 import pandas as pd
 import requests
+from log import logger
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
 
-logger = logging.getLogger(__name__)
-
 
 def get_gsp_boundaries() -> json:
     """Get boundaries for gsp regions"""
 
     # get gsp boundaries
-    logger.debug("Get gsp boundaries")
+    logger.info("Get gsp boundaries")
     r = requests.get(API_URL + "/v0/GB/solar/gsp/gsp_boundaries/")
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])

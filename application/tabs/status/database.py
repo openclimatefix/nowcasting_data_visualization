@@ -1,5 +1,4 @@
 """Database functions for status """
-import logging
 import os
 from datetime import datetime, timedelta, timezone
 
@@ -9,9 +8,6 @@ from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.models.base import Base_PV
 from nowcasting_datamodel.models.models import InputDataLastUpdated
 from nowcasting_datamodel.read.read import get_latest_input_data_last_updated
-
-logger = logging.getLogger(__name__)
-
 
 pv_status = {"warning": timedelta(minutes=10), "error": timedelta(minutes=20)}
 

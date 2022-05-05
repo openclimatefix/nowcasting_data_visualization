@@ -1,13 +1,11 @@
 """ Callbacks functions """
-import logging
 from datetime import datetime, timezone
 from typing import List
 
 from dash import Input, Output, State
+from log import logger
 
 from .plots import make_map_plot, make_plots
-
-logger = logging.getLogger(__name__)
 
 
 def make_callbacks(app):

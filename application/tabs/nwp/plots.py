@@ -1,14 +1,12 @@
 """ Make nwp plots """
 
-import logging
 from datetime import datetime
 from typing import List, Optional
 
 import pandas as pd
 import xarray as xr
+from log import logger
 from plotly import graph_objects as go
-
-logger = logging.getLogger(__name__)
 
 
 def make_slider(labels: List[str]) -> dict:
