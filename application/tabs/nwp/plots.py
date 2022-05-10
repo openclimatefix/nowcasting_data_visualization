@@ -65,7 +65,7 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.n
 
     logger.debug(f"Plotting data {filename=}, {init_time=}, {variable=}")
     print(filename)
-    nwp_xr = xr.load_dataset(filename)["UKV"]
+    nwp_xr = xr.open_dataset(filename)["UKV"]
     init_time = datetime.fromisoformat(init_time)
 
     nwp_xr = nwp_xr.sel(init_time=init_time)
@@ -88,7 +88,7 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.n
     fig = go.Figure(
         data=traces[0],
         layout=go.Layout(
-            title="Start Title",
+            title=f"Start Title - {variable} - {init_time}",
         ),
     )
 

@@ -32,7 +32,7 @@ def nwp_make_callbacks(app):
 
         logger.debug(f"Making nwp drop downs for {refresh_time=}")
 
-        nwp_xr = xr.load_dataset("nwp_latest.netcdf")["UKV"]
+        nwp_xr = xr.open_dataset("nwp_latest.netcdf")["UKV"]
         variables = nwp_xr["variable"].values
         init_times = nwp_xr.init_time.values
 
