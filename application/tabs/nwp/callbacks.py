@@ -38,6 +38,9 @@ def nwp_make_callbacks(app):
 
         init_times = [pd.to_datetime(init_time).isoformat() for init_time in init_times]
 
+        logger.debug(f"Variables are {variables}")
+        logger.debug(f"init_times are {init_times}")
+
         return init_times, variables
 
     @app.callback(
