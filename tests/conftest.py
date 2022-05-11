@@ -56,7 +56,7 @@ def input_data_last_updated(db_session):
 def forecast(db_session):
     """Add InputDataLastUpdatedSQL to db"""
     f1 = make_fake_forecast(session=db_session, gsp_id=1)
-    f2 = make_fake_national_forecast()
+    f2 = make_fake_national_forecast(session=db_session)
 
     db_session.add_all([f1, f2])
     db_session.commit()
