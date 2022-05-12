@@ -137,7 +137,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
         return figs[0]
 
 
-def make_map_plot(boundaries: Optional = None):
+def make_map_plot(boundaries: Optional = None, normalize: bool = False):
     """Makes a list of map plot of forecast"""
 
     # get gsp boundaries
@@ -149,8 +149,9 @@ def make_map_plot(boundaries: Optional = None):
         boundaries = gpd.GeoDataFrame.from_features(boundaries_dict["features"])
 
     # get all forecast
-    logger.debug("Get all gsp forecasts")
-    r = requests.get(API_URL + "/v0/GB/solar/gsp/forecast/all/")
+    route = "/v0/GB/solar/gsp/forecast/all"
+    logger.debug(f"Get all gsp forecasts {normalize=} {route=}")
+    r = requests.get(API_URL + route, params={"normalize": "true"})
     d = r.json()
     forecasts = ManyForecasts(**d)
 
@@ -164,7 +165,17 @@ def make_map_plot(boundaries: Optional = None):
             f.location.gsp_id: f.forecast_values[i].expected_power_generation_megawatts
             for f in forecasts.forecasts
         }
+        predictions_normalized = {
+            f.location.gsp_id: f.forecast_values[i].expected_power_generation_normalized
+            for f in forecasts.forecasts
+        }
         predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
+        predictions_normalized_df = pd.DataFrame(
+            list(predictions_normalized.items()), columns=["gsp_id", "value_normalized"]
+        )
+        predictions_normalized_df.fillna(0, inplace=True)
+
+        predictions_df = predictions_df.join(predictions_normalized_df, on="gsp_id", rsuffix="_n")
 
         boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
 
@@ -180,18 +191,28 @@ def make_map_plot(boundaries: Optional = None):
             int
         ).astype(str)
 
+        if normalize:
+            zmax = 1
+            z = boundaries_and_results.value_normalized
+        else:
+            zmax = 400
+            z = boundaries_and_results.value.round(0)
+
         # plot it
         traces.append(
             go.Choroplethmapbox(
                 geojson=shapes_dict,
                 locations=boundaries_and_results.index,
-                z=boundaries_and_results.value.round(0),
-                colorscale="solar",
+                z=z,
+                colorscale="YlOrRd",
+                # colorscale=[[0, 'rgb(255,255,255)'], [1,
+                # 'rgb(255,255,0)']],
                 # hoverinfo=trace,
                 hovertext=boundaries_and_results["label"].tolist(),
                 name=None,
-                zmax=500,
+                zmax=zmax,
                 zmin=0,
+                # marker={"opacity": (boundaries_and_results.value_normalized).tolist()},
                 marker={"opacity": 0.5},
             )
         )

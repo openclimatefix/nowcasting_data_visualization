@@ -69,12 +69,12 @@ def make_layout():
     tab1 = html.Div(
         children=[
             dcc.RadioItems(
-                id="radio-gsp-pv",
+                id="radio-summary-normalize",
                 options=[
-                    {"label": "GSP Forecast", "value": "Forecast"},
-                    {"label": "PVLive", "value": "PVLive"},
+                    {"label": "MW", "value": "0"},
+                    {"label": "%", "value": "1"},
                 ],
-                value="Forecast",
+                value="0",
             ),
             dbc.Row(
                 [
