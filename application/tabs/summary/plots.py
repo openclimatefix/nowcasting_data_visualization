@@ -8,7 +8,7 @@ import geopandas as gpd
 import pandas as pd
 import requests
 from log import logger
-from nowcasting_datamodel.models import ForecastValue, GSPYield, LocationSQL, ManyForecasts
+from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
 API_URL = os.getenv("API_URL")
