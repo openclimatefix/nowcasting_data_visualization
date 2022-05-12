@@ -149,7 +149,7 @@ def make_map_plot(boundaries: Optional = None, normalize: bool = False):
         boundaries = gpd.GeoDataFrame.from_features(boundaries_dict["features"])
 
     # get all forecast
-    route = f"/v0/GB/solar/gsp/forecast/all"
+    route = "/v0/GB/solar/gsp/forecast/all"
     logger.debug(f"Get all gsp forecasts {normalize=} {route=}")
     r = requests.get(API_URL + route, params={"normalize": "true"})
     d = r.json()
