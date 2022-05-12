@@ -31,15 +31,16 @@ def make_callbacks(app):
             Output("store-map-national", "data"),
             Output("summary-refresh-status", "children"),
         ],
-        [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals")],
+        [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals"), Input("radio-summary-normalize",'value')],
         State("store-gsp-boundaries", "data"),
     )
-    def refresh_trigger(n_clicks, n_intervals, boundaries):
+    def refresh_trigger(n_clicks, n_intervals, normalize:bool, boundaries):
 
-        logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=}")
+        logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=} {normalize=}")
+        normalize = bool(int(normalize))
 
         national = make_plots()
-        national_map = make_map_plot(boundaries=boundaries)
+        national_map = make_map_plot(boundaries=boundaries, normalize=normalize)
 
         now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
         return national, national_map, f"Last refreshed at {now_text}"
