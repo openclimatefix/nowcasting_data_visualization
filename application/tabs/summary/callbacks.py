@@ -31,10 +31,14 @@ def make_callbacks(app):
             Output("store-map-national", "data"),
             Output("summary-refresh-status", "children"),
         ],
-        [Input("summary-refresh", "n_clicks"), Input("summary-interval", "n_intervals"), Input("radio-summary-normalize",'value')],
+        [
+            Input("summary-refresh", "n_clicks"),
+            Input("summary-interval", "n_intervals"),
+            Input("radio-summary-normalize", "value"),
+        ],
         State("store-gsp-boundaries", "data"),
     )
-    def refresh_trigger(n_clicks, n_intervals, normalize:bool, boundaries):
+    def refresh_trigger(n_clicks, n_intervals, normalize: bool, boundaries):
 
         logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=} {normalize=}")
         normalize = bool(int(normalize))

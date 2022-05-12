@@ -137,7 +137,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
         return figs[0]
 
 
-def make_map_plot(boundaries: Optional = None,  normalize: bool = False):
+def make_map_plot(boundaries: Optional = None, normalize: bool = False):
     """Makes a list of map plot of forecast"""
 
     # get gsp boundaries
@@ -151,7 +151,7 @@ def make_map_plot(boundaries: Optional = None,  normalize: bool = False):
     # get all forecast
     route = f"/v0/GB/solar/gsp/forecast/all"
     logger.debug(f"Get all gsp forecasts {normalize=} {route=}")
-    r = requests.get(API_URL + route, params={'normalize': 'true'})
+    r = requests.get(API_URL + route, params={"normalize": "true"})
     d = r.json()
     forecasts = ManyForecasts(**d)
 
@@ -170,11 +170,12 @@ def make_map_plot(boundaries: Optional = None,  normalize: bool = False):
             for f in forecasts.forecasts
         }
         predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
-        predictions_normalized_df = pd.DataFrame(list(predictions_normalized.items()),
-                                                 columns=["gsp_id", "value_normalized"])
-        predictions_normalized_df.fillna(0,inplace=True)
+        predictions_normalized_df = pd.DataFrame(
+            list(predictions_normalized.items()), columns=["gsp_id", "value_normalized"]
+        )
+        predictions_normalized_df.fillna(0, inplace=True)
 
-        predictions_df = predictions_df.join(predictions_normalized_df, on='gsp_id', rsuffix="_n")
+        predictions_df = predictions_df.join(predictions_normalized_df, on="gsp_id", rsuffix="_n")
 
         boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
 
@@ -205,7 +206,7 @@ def make_map_plot(boundaries: Optional = None,  normalize: bool = False):
                 z=z,
                 colorscale="YlOrRd",
                 # colorscale=[[0, 'rgb(255,255,255)'], [1,
-            # 'rgb(255,255,0)']],
+                # 'rgb(255,255,0)']],
                 # hoverinfo=trace,
                 hovertext=boundaries_and_results["label"].tolist(),
                 name=None,
