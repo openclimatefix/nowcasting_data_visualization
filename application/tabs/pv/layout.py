@@ -3,12 +3,14 @@
 import dash_bootstrap_components as dbc
 import numpy as np
 from dash import dcc, html
-
+import asyncio
 from .plots import get_all_pv_systems_ids, make_pv_plot
 
 
-def pv_make_layout():
+async def pv_make_layout():
     """Make pv htm layout"""
+
+    await asyncio.sleep(0.1)
 
     all_pv_systems_ids = get_all_pv_systems_ids()
     random_choices = list(np.random.choice(len(get_all_pv_systems_ids()), 10))

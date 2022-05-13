@@ -1,13 +1,15 @@
 """ Make status layout """
 from datetime import datetime, timezone
-
+import asyncio
 from dash import dash_table, dcc, html
 
 from .database import get_consumer_status, get_forecast_status
 
 
-def make_status_layout():
+async def make_status_layout():
     """Make html status page"""
+
+    await asyncio.sleep(0.1)
 
     now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
     style_data_conditional = [

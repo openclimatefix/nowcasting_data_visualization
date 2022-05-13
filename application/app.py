@@ -12,6 +12,7 @@ from tabs.status.callbacks import make_status_callbacks
 from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
+import asyncio
 
 # logging.getLogger("app").setLevel('DEBUG')
 # logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
@@ -36,11 +37,22 @@ def make_app():
 
     make_auth(app)
 
+    async def make_all_tabs_layout():
+        tasks = []
+        tasks.append(asyncio.create_task(make_layout()))
+        tasks.append(asyncio.create_task(pv_make_layout()))
+        tasks.append(asyncio.create_task(make_status_layout()))
+        res = await asyncio.gather(*tasks)
+        return res
+
+    tab_summary, tab_pv, tab_status = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
+
+
     # TODO make async to speed up
-    tab_summary = make_layout()
-    tab_pv = pv_make_layout()
-    tab_status = make_status_layout()
-    tab_nwp = nwp_make_layout()
+    # tab_summary = results["summary"]
+    # tab_pv = results["pv"]
+    # tab_status = results["status"]
+    # tab_nwp = results["nwp"]
 
     app.layout = html.Div(
         children=[
@@ -52,7 +64,7 @@ def make_app():
                     dcc.Tab(tab_summary, label="Summary", value="tab-summary"),
                     dcc.Tab(tab_status, label="Status", value="tab-status"),
                     dcc.Tab(tab_pv, label="PV", value="tab-pv"),
-                    dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
+                    # dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
                 ],
             ),
             # html.Div(id="tabs-content-example-graph"),

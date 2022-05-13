@@ -1,4 +1,5 @@
 """ Make summary layout """
+import asyncio
 import os
 
 import dash_bootstrap_components as dbc
@@ -7,8 +8,10 @@ from dash import dcc, html
 from .plots import get_gsp_boundaries, make_map_plot, make_plots
 
 
-def make_layout():
+async def make_layout():
     """Make Summary layout"""
+
+    await asyncio.sleep(0.1)
 
     boundaries = get_gsp_boundaries()
 
