@@ -47,8 +47,9 @@ def make_app():
         res = await asyncio.gather(*tasks)
         return res
 
-
-    tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
+    tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(
+        make_all_tabs_layout()
+    )
 
     app.layout = html.Div(
         children=[
