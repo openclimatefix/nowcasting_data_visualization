@@ -42,17 +42,11 @@ def make_app():
         tasks.append(asyncio.create_task(make_layout()))
         tasks.append(asyncio.create_task(pv_make_layout()))
         tasks.append(asyncio.create_task(make_status_layout()))
+        tasks.append(asyncio.create_task(nwp_make_layout()))
         res = await asyncio.gather(*tasks)
         return res
 
-    tab_summary, tab_pv, tab_status = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
-
-
-    # TODO make async to speed up
-    # tab_summary = results["summary"]
-    # tab_pv = results["pv"]
-    # tab_status = results["status"]
-    # tab_nwp = results["nwp"]
+    tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
 
     app.layout = html.Div(
         children=[
@@ -64,10 +58,10 @@ def make_app():
                     dcc.Tab(tab_summary, label="Summary", value="tab-summary"),
                     dcc.Tab(tab_status, label="Status", value="tab-status"),
                     dcc.Tab(tab_pv, label="PV", value="tab-pv"),
-                    # dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
+                    dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
                 ],
             ),
-            # html.Div(id="tabs-content-example-graph"),
+            html.Div(id="tabs-content-example-graph"),
             html.Footer(f"version {version}", id="footer"),
         ]
     )
