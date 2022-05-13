@@ -1,5 +1,7 @@
 """ Main app file """
 
+import asyncio
+
 import dash_bootstrap_components as dbc
 from auth import make_auth
 from dash import Dash, dcc, html
@@ -36,11 +38,18 @@ def make_app():
 
     make_auth(app)
 
-    # TODO make async to speed up
-    tab_summary = make_layout()
-    tab_pv = pv_make_layout()
-    tab_status = make_status_layout()
-    tab_nwp = nwp_make_layout()
+    async def make_all_tabs_layout():
+        tasks = []
+        tasks.append(asyncio.create_task(make_layout()))
+        tasks.append(asyncio.create_task(pv_make_layout()))
+        tasks.append(asyncio.create_task(make_status_layout()))
+        tasks.append(asyncio.create_task(nwp_make_layout()))
+        res = await asyncio.gather(*tasks)
+        return res
+
+    tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(
+        make_all_tabs_layout()
+    )
 
     app.layout = html.Div(
         children=[
@@ -55,7 +64,7 @@ def make_app():
                     dcc.Tab(tab_nwp, label="NWP", value="tab-nwp"),
                 ],
             ),
-            # html.Div(id="tabs-content-example-graph"),
+            html.Div(id="tabs-content-example-graph"),
             html.Footer(f"version {version}", id="footer"),
         ]
     )

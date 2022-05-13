@@ -1,5 +1,7 @@
 """ PV lyaout code """
 
+import asyncio
+
 import dash_bootstrap_components as dbc
 import pandas as pd
 import xarray as xr
@@ -8,8 +10,10 @@ from dash import dcc, html
 from .download import download_data
 
 
-def nwp_make_layout():
+async def nwp_make_layout():
     """Make pv htm layout"""
+
+    await asyncio.sleep(0.1)
 
     download_data()
 
