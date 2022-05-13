@@ -1,9 +1,11 @@
 """ PV lyaout code """
 
+import asyncio
+
 import dash_bootstrap_components as dbc
 import numpy as np
 from dash import dcc, html
-import asyncio
+
 from .plots import get_all_pv_systems_ids, make_pv_plot
 
 

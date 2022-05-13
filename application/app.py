@@ -1,5 +1,7 @@
 """ Main app file """
 
+import asyncio
+
 import dash_bootstrap_components as dbc
 from auth import make_auth
 from dash import Dash, dcc, html
@@ -12,7 +14,6 @@ from tabs.status.callbacks import make_status_callbacks
 from tabs.status.layout import make_status_layout
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
-import asyncio
 
 # logging.getLogger("app").setLevel('DEBUG')
 # logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
@@ -45,8 +46,9 @@ def make_app():
         res = await asyncio.gather(*tasks)
         return res
 
-    tab_summary, tab_pv, tab_status = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
-
+    tab_summary, tab_pv, tab_status = asyncio.get_event_loop().run_until_complete(
+        make_all_tabs_layout()
+    )
 
     # TODO make async to speed up
     # tab_summary = results["summary"]

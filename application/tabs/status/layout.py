@@ -1,6 +1,7 @@
 """ Make status layout """
-from datetime import datetime, timezone
 import asyncio
+from datetime import datetime, timezone
+
 from dash import dash_table, dcc, html
 
 from .database import get_consumer_status, get_forecast_status
