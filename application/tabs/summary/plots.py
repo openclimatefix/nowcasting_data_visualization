@@ -88,7 +88,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
             x=gsp_truths_in_day["datetime_utc"],
             y=gsp_truths_in_day["solar_generation_kw"] / 10**3,
             mode="lines",
-            name="PV live Truth: in-day",
+            name="PV live: in-day",
             line={"dash": "dash", "color": "blue"},
         )
 
@@ -98,7 +98,7 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
             x=gsp_truths_day_after["datetime_utc"],
             y=gsp_truths_day_after["solar_generation_kw"] / 10**3,
             mode="lines",
-            name="PV live Truth: Day-After",
+            name="PV live: Day-After",
             line={"dash": "solid", "color": "blue"},
         )
 
@@ -113,9 +113,9 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
         )
 
         if gsp_id == 0:
-            title = "National - Forecast and Truths"
+            title = "National"
         else:
-            title = f"GSP {gsp_id} - Forecast and Truths"
+            title = f"GSP {gsp_id}"
 
         fig = go.Figure(data=[trace_in_day, trace_day_after, trace_forecast])
         fig.update_layout(

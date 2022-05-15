@@ -15,29 +15,20 @@ async def make_layout():
 
     boundaries = get_gsp_boundaries()
 
-    modal = html.Div(
+    national_plot = html.Div(
         [
-            dbc.Modal(
-                [
-                    dbc.ModalHeader("GSP plot"),
-                    dbc.ModalBody(
-                        [
-                            html.H4(id="hover_info"),
-                            dcc.Graph(
-                                id="plot-modal", figure=make_plots(gsp_id=1, show_yesterday=False)
-                            ),
-                        ]
-                    ),
-                    dbc.ModalFooter(dbc.Button("Close", id="close", className="ml-auto")),
-                    dcc.Store(id="store-gsp", storage_type="memory"),
-                ],
-                id="modal",
-                is_open=False,
+            dcc.Interval(id="summary-interval", interval=1000 * 60 * 5),
+            dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
+            dcc.Graph(
+                id="plot-national",
             ),
-        ]
+            # html.Iframe(src='./uk_map.html')
+            dcc.Graph(id="plot-modal", figure=make_plots(gsp_id=1, show_yesterday=False)),
+        ],
+        style={"width": "95%"},
     )
 
-    national_plot = html.Div(
+    national_map = html.Div(
         [
             dbc.Button("Refresh", id="summary-refresh"),
             dcc.Loading(
@@ -45,18 +36,6 @@ async def make_layout():
                 type="default",
                 children=html.Div(id="summary-loading-output-1"),
             ),
-            dcc.Interval(id="summary-interval", interval=1000 * 60 * 5),
-            dcc.Checklist(["Yesterday"], [""], id="tick-show-yesterday"),
-            dcc.Graph(
-                id="plot-national",
-            ),
-            # html.Iframe(src='./uk_map.html')
-        ],
-        style={"width": "95%"},
-    )
-
-    national_map = html.Div(
-        [
             dcc.Graph(
                 id="plot-map",
             ),
@@ -64,7 +43,6 @@ async def make_layout():
                 id="summary-slider-update",
                 interval=int(os.getenv("MAP_REFRESH_SECONDS", "3")) * 1000,
             ),
-            modal,
         ],
         style={"width": "95%"},
     )
@@ -81,8 +59,8 @@ async def make_layout():
             ),
             dbc.Row(
                 [
-                    dbc.Col(html.Div(national_map)),
                     dbc.Col(html.Div(national_plot)),
+                    dbc.Col(html.Div(national_map)),
                 ],
             ),
             dcc.Store(id="store-national", storage_type="memory", data=make_plots()),
