@@ -20,3 +20,7 @@ Things to do
 To run local pytests you need to
 1. add `application` to python path `export PYTHONPATH=$PYTHONPATH:./application`
 2. run pytests: `pytest`
+
+
+Useful command:
+docker stop all container - `docker stop $(docker ps -a -q)`
