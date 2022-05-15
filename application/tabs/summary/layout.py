@@ -53,6 +53,7 @@ async def make_layout():
                 id="summary-slider-update",
                 interval=int(os.getenv("MAP_REFRESH_SECONDS", "3")) * 1000,
             ),
+            dcc.Store(id="store-summary-plot-map-data", storage_type="memory"),
         ],
         style={"width": "95%"},
     )
@@ -69,7 +70,7 @@ async def make_layout():
             dcc.Store(
                 id="store-map-national",
                 storage_type="memory",
-                data=make_map_plot(boundaries=boundaries),
+                data=make_map_plot(boundaries=boundaries, d=None),
             ),
             dcc.Store(id="store-gsp-boundaries", storage_type="memory", data=boundaries),
         ],

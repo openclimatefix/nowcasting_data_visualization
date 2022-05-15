@@ -5,7 +5,7 @@ from typing import List
 from dash import Input, Output, State
 from log import logger
 
-from .plots import make_map_plot, make_plots
+from .plots import make_map_plot, make_plots, gat_map_data
 
 
 def make_callbacks(app):
@@ -13,14 +13,16 @@ def make_callbacks(app):
 
     app.clientside_callback(
         """
-        function(n_intervals, data) {
+        function(n_intervals, normalize, data) {
             let N = data.length
+            let n_index = parseInt(normalize)
             i = n_intervals % N
-            return data[i]
+            console.log(i,n_index)
+            return data[n_index][i]
             }
         """,
         Output("plot-map", "figure"),
-        Input("summary-slider-update", "n_intervals"),
+        [Input("summary-slider-update", "n_intervals"),Input("radio-summary-normalize", "value")],
         State("store-map-national", "data"),
     )
 
@@ -28,23 +30,21 @@ def make_callbacks(app):
     @app.callback(
         [
             Output("store-national", "data"),
-            Output("store-map-national", "data"),
+            Output("store-summary-plot-map-data", "data"),
             Output("summary-refresh-status", "children"),
         ],
         [
             Input("summary-refresh", "n_clicks"),
             Input("summary-interval", "n_intervals"),
-            Input("radio-summary-normalize", "value"),
         ],
         State("store-gsp-boundaries", "data"),
     )
-    def refresh_trigger(n_clicks, n_intervals, normalize: bool, boundaries):
+    def refresh_trigger(n_clicks, n_intervals, boundaries):
 
-        logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=} {normalize=}")
-        normalize = bool(int(normalize))
+        logger.debug(f"Refreshing Summary data {n_clicks=} {n_intervals=}")
 
         national = make_plots()
-        national_map = make_map_plot(boundaries=boundaries, normalize=normalize)
+        national_map = gat_map_data(boundaries=boundaries)
 
         now_text = datetime.now(timezone.utc).strftime("Refresh time: %Y-%m-%d %H:%M:%S  [UTC]")
         return national, national_map, f"Last refreshed at {now_text}"
@@ -70,5 +70,17 @@ def make_callbacks(app):
         fig = make_plots(gsp_id=gsp_id, show_yesterday=False)
 
         return fig
+
+    @app.callback(
+        Output("store-map-national", "data"),
+        Input("store-summary-plot-map-data", "data"),
+        State("store-gsp-boundaries", "data"),
+    )
+    def callback_make_map_plot(map_data,normalize, boundaries):
+
+        logger.debug(f'Making map plot from map data and {normalize=}')
+        normalize = bool(int(normalize))
+
+        return make_map_plot(boundaries=boundaries,d=map_data)
 
     return app
