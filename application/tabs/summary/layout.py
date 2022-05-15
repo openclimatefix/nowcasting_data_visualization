@@ -38,6 +38,14 @@ async def make_layout():
                 type="default",
                 children=html.Div(id="summary-loading-output-1"),
             ),
+            dcc.RadioItems(
+                id="radio-summary-normalize",
+                options=[
+                    {"label": "MW", "value": "0"},
+                    {"label": "%", "value": "1"},
+                ],
+                value="0",
+            ),
             dcc.Graph(
                 id="plot-map",
             ),
@@ -51,14 +59,6 @@ async def make_layout():
 
     tab1 = html.Div(
         children=[
-            dcc.RadioItems(
-                id="radio-summary-normalize",
-                options=[
-                    {"label": "MW", "value": "0"},
-                    {"label": "%", "value": "1"},
-                ],
-                value="0",
-            ),
             dbc.Row(
                 [
                     dbc.Col(html.Div(national_plot)),
