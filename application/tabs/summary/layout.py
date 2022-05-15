@@ -23,9 +23,7 @@ async def make_layout():
                 id="plot-national",
             ),
             # html.Iframe(src='./uk_map.html')
-            dcc.Graph(
-                id="plot-modal", figure=make_plots(gsp_id=1, show_yesterday=False)
-            ),
+            dcc.Graph(id="plot-modal", figure=make_plots(gsp_id=1, show_yesterday=False)),
         ],
         style={"width": "95%"},
     )
