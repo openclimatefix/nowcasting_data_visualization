@@ -81,10 +81,9 @@ def make_callbacks(app):
         Input("store-summary-plot-map-data", "data"),
         State("store-gsp-boundaries", "data"),
     )
-    def callback_make_map_plot(map_data, normalize, boundaries):
+    def callback_make_map_plot(map_data, boundaries):
 
-        logger.debug(f"Making map plot from map data and {normalize=}")
-        normalize = bool(int(normalize))
+        logger.debug(f"Making map plot from map data")
 
         return make_map_plot(boundaries=boundaries, d=map_data)
 
