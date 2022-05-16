@@ -6,7 +6,9 @@ import fsspec
 from log import logger
 
 
-def download_satellite_data(replace: bool = False, local_filename: Optional[str] = "satellite_latest.zarr.zip"):
+def download_satellite_data(
+    replace: bool = False, local_filename: Optional[str] = "satellite_latest.zarr.zip"
+):
     """Get download data"""
 
     logger.info(f"Downloading nwp data. {replace=} {local_filename=}")
