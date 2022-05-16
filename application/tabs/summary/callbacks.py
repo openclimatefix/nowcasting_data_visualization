@@ -83,7 +83,7 @@ def make_callbacks(app):
     )
     def callback_make_map_plot(map_data, boundaries):
 
-        logger.debug(f"Making map plot from map data")
+        logger.debug("Making map plot from map data")
 
         return make_map_plot(boundaries=boundaries, d=map_data)
 
