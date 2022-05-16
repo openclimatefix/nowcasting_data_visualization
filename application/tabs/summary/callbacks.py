@@ -64,9 +64,14 @@ def make_callbacks(app):
         Input("plot-map", "clickData"),
     )
     def toggle_modal(click_data):
-        """Call back for pop up GSP graph"""
+        """Call back for pop up GSP graph
 
-        gsp_id = int(click_data["points"][0]["pointNumber"] + 1)
+        If nothin has been clicked then, default is gspPd of 1
+        """
+        if click_data is None:
+            gsp_id = 1
+        else:
+            gsp_id = int(click_data["points"][0]["pointNumber"] + 1)
         fig = make_plots(gsp_id=gsp_id, show_yesterday=False)
 
         return fig
@@ -76,10 +81,9 @@ def make_callbacks(app):
         Input("store-summary-plot-map-data", "data"),
         State("store-gsp-boundaries", "data"),
     )
-    def callback_make_map_plot(map_data, normalize, boundaries):
+    def callback_make_map_plot(map_data, boundaries):
 
-        logger.debug(f"Making map plot from map data and {normalize=}")
-        normalize = bool(int(normalize))
+        logger.debug("Making map plot from map data")
 
         return make_map_plot(boundaries=boundaries, d=map_data)
 
