@@ -19,7 +19,7 @@ from tabs.summary.layout import make_layout
 # logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "0.0.39"
+version = "0.0.40"
 logger.debug(f"Running {version} of Data visulization ")
 print(version)
 
