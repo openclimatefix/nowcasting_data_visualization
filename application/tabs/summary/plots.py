@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from typing import Optional, Union
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 import requests
 from log import logger
@@ -137,8 +138,23 @@ def make_plots(gsp_id: int = 0, show_yesterday: Union[str, bool] = "both"):
         return figs[0]
 
 
-def make_map_plot(boundaries: Optional = None, normalize: bool = False):
+def gat_map_data(boundaries: Optional = None):
     """Makes a list of map plot of forecast"""
+
+    # get all forecast
+    route = "/v0/GB/solar/gsp/forecast/all"
+    logger.debug(f"Get all gsp forecasts {route=}")
+    r = requests.get(API_URL + route, params={"normalize": "true"})
+    d = r.json()
+
+    return d
+
+
+def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
+    """Makes a list of map plot of forecast"""
+
+    if d is None:
+        d = gat_map_data(boundaries=boundaries)
 
     # get gsp boundaries
     if boundaries is None:
@@ -148,11 +164,6 @@ def make_map_plot(boundaries: Optional = None, normalize: bool = False):
         boundaries_dict = json.loads(boundaries)
         boundaries = gpd.GeoDataFrame.from_features(boundaries_dict["features"])
 
-    # get all forecast
-    route = "/v0/GB/solar/gsp/forecast/all"
-    logger.debug(f"Get all gsp forecasts {normalize=} {route=}")
-    r = requests.get(API_URL + route, params={"normalize": "true"})
-    d = r.json()
     forecasts = ManyForecasts(**d)
 
     # format predictions
@@ -160,62 +171,65 @@ def make_map_plot(boundaries: Optional = None, normalize: bool = False):
         forecast_value.target_time for forecast_value in forecasts.forecasts[1].forecast_values
     ]
     traces = []
-    for i in range(len(times)):
-        predictions = {
-            f.location.gsp_id: f.forecast_values[i].expected_power_generation_megawatts
-            for f in forecasts.forecasts
-        }
-        predictions_normalized = {
-            f.location.gsp_id: f.forecast_values[i].expected_power_generation_normalized
-            for f in forecasts.forecasts
-        }
-        predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
-        predictions_normalized_df = pd.DataFrame(
-            list(predictions_normalized.items()), columns=["gsp_id", "value_normalized"]
-        )
-        predictions_normalized_df.fillna(0, inplace=True)
-
-        predictions_df = predictions_df.join(predictions_normalized_df, on="gsp_id", rsuffix="_n")
-
-        boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
-
-        #  plot
-        boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
-        boundaries_and_results.set_index("gsp_name", inplace=True)
-
-        # make shape dict for plotting
-        shapes_dict = json.loads(boundaries_and_results.to_json())
-
-        # make label
-        boundaries_and_results["label"] = " GSP id:" + boundaries_and_results["gsp_id"].astype(
-            int
-        ).astype(str)
-
-        if normalize:
-            zmax = 1
-            z = boundaries_and_results.value_normalized
-        else:
-            zmax = 400
-            z = boundaries_and_results.value.round(0)
-
-        # plot it
-        traces.append(
-            go.Choroplethmapbox(
-                geojson=shapes_dict,
-                locations=boundaries_and_results.index,
-                z=z,
-                colorscale="YlOrRd",
-                # colorscale=[[0, 'rgb(255,255,255)'], [1,
-                # 'rgb(255,255,0)']],
-                # hoverinfo=trace,
-                hovertext=boundaries_and_results["label"].tolist(),
-                name=None,
-                zmax=zmax,
-                zmin=0,
-                # marker={"opacity": (boundaries_and_results.value_normalized).tolist()},
-                marker={"opacity": 0.5},
+    for normalize in [False, True]:
+        for i in range(len(times)):
+            predictions = {
+                f.location.gsp_id: f.forecast_values[i].expected_power_generation_megawatts
+                for f in forecasts.forecasts
+            }
+            predictions_normalized = {
+                f.location.gsp_id: f.forecast_values[i].expected_power_generation_normalized
+                for f in forecasts.forecasts
+            }
+            predictions_df = pd.DataFrame(list(predictions.items()), columns=["gsp_id", "value"])
+            predictions_normalized_df = pd.DataFrame(
+                list(predictions_normalized.items()), columns=["gsp_id", "value_normalized"]
             )
-        )
+            predictions_normalized_df.fillna(0, inplace=True)
+
+            predictions_df = predictions_df.join(
+                predictions_normalized_df, on="gsp_id", rsuffix="_n"
+            )
+
+            boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
+
+            #  plot
+            boundaries_and_results = boundaries_and_results[~boundaries_and_results.RegionID.isna()]
+            boundaries_and_results.set_index("gsp_name", inplace=True)
+
+            # make shape dict for plotting
+            shapes_dict = json.loads(boundaries_and_results.to_json())
+
+            # make label
+            boundaries_and_results["label"] = " GSP id:" + boundaries_and_results["gsp_id"].astype(
+                int
+            ).astype(str)
+
+            if normalize:
+                zmax = 1
+                z = boundaries_and_results.value_normalized
+            else:
+                zmax = 400
+                z = boundaries_and_results.value.round(0)
+
+            # plot it
+            traces.append(
+                go.Choroplethmapbox(
+                    geojson=shapes_dict,
+                    locations=boundaries_and_results.index,
+                    z=z,
+                    colorscale="YlOrRd",
+                    # colorscale=[[0, 'rgb(255,255,255)'], [1,
+                    # 'rgb(255,255,0)']],
+                    # hoverinfo=trace,
+                    hovertext=boundaries_and_results["label"].tolist(),
+                    name=None,
+                    zmax=zmax,
+                    zmin=0,
+                    # marker={"opacity": (boundaries_and_results.value_normalized).tolist()},
+                    marker={"opacity": 0.5},
+                )
+            )
 
     figs = []
     for i in range(len(traces)):
@@ -230,11 +244,16 @@ def make_map_plot(boundaries: Optional = None, normalize: bool = False):
             margin={"r": 0, "t": 30, "l": 0, "b": 30},
             height=700,
         )
-        fig.update_layout(title=f"Solar Generation [MW]: {times[i].isoformat()}")
+        fig.update_layout(title=f"Solar Generation [MW]: {times[i % len(times)].isoformat()}")
 
         figs.append(fig)
 
+    # reshape in [normalize, times]
+    logger.debug(f"Made {len(figs)} figures")
+    figs = np.array([figs[0 : len(times)], figs[len(times) :]])
+
     logger.debug("Done making map plot")
+    logger.debug(figs.shape)
 
     return figs
 

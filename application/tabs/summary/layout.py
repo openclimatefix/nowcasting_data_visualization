@@ -36,19 +36,6 @@ async def make_layout():
                 type="default",
                 children=html.Div(id="summary-loading-output-1"),
             ),
-            dcc.Graph(
-                id="plot-map",
-            ),
-            dcc.Interval(
-                id="summary-slider-update",
-                interval=int(os.getenv("MAP_REFRESH_SECONDS", "3")) * 1000,
-            ),
-        ],
-        style={"width": "95%"},
-    )
-
-    tab1 = html.Div(
-        children=[
             dcc.RadioItems(
                 id="radio-summary-normalize",
                 options=[
@@ -57,6 +44,20 @@ async def make_layout():
                 ],
                 value="0",
             ),
+            dcc.Graph(
+                id="plot-map",
+            ),
+            dcc.Interval(
+                id="summary-slider-update",
+                interval=int(os.getenv("MAP_REFRESH_SECONDS", "3")) * 1000,
+            ),
+            dcc.Store(id="store-summary-plot-map-data", storage_type="memory"),
+        ],
+        style={"width": "95%"},
+    )
+
+    tab1 = html.Div(
+        children=[
             dbc.Row(
                 [
                     dbc.Col(html.Div(national_plot)),
@@ -67,7 +68,7 @@ async def make_layout():
             dcc.Store(
                 id="store-map-national",
                 storage_type="memory",
-                data=make_map_plot(boundaries=boundaries),
+                data=make_map_plot(boundaries=boundaries, d=None),
             ),
             dcc.Store(id="store-gsp-boundaries", storage_type="memory", data=boundaries),
         ],
