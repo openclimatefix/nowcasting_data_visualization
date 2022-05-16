@@ -71,6 +71,9 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.n
     nwp_xr = nwp_xr.sel(init_time=init_time)
     nwp_xr = nwp_xr.sel(variable=variable)
 
+    zmax = float(nwp_xr.max())
+    zmin = float(nwp_xr.min())
+
     # TODO
     # reproject to lat lon and put on coastline
 
@@ -78,7 +81,7 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.n
     traces = []
     labels = []
     for i in range(len(nwp_xr.step)):
-        traces.append(go.Heatmap(z=nwp_xr[i].values, zmin=0, zmax=1000))
+        traces.append(go.Heatmap(z=nwp_xr[i].values, zmin=zmin, zmax=zmax))
         # do we need pandas here?
         step = pd.to_timedelta(nwp_xr.step[i].values)
         labels.append(init_time + step)
