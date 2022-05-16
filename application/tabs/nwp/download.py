@@ -19,5 +19,6 @@ def download_data(replace: bool = False, local_filename: Optional[str] = "nwp_la
         print(f"Downloading nwp data {filename}")
         fs = fsspec.open(filename).fs
         fs.get(filename, local_filename)
+        logger.debug(f"Downloading nwp data {filename}: done")
     else:
         logger.debug(f"Not downloading nwp data, as it already exists {local_filename=}")

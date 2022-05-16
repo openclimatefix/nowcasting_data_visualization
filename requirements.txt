@@ -14,3 +14,4 @@ s3fs
 fsspec
 pathy
 nowcasting_datamodel==0.0.56
+zarr
