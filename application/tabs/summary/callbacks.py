@@ -61,7 +61,7 @@ def make_callbacks(app):
 
     @app.callback(
         Output("plot-modal", "figure"),
-        [Input("plot-map", "clickData"), Input("tick-show-yesterday", "value")]
+        [Input("plot-map", "clickData"), Input("tick-show-yesterday", "value")],
     )
     def toggle_modal(click_data, yesterday_value):
         """Call back for pop up GSP graph
