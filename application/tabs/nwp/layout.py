@@ -30,7 +30,7 @@ async def nwp_make_layout():
             html.Div("Init time"),
             dcc.Dropdown(
                 init_times,
-                init_times[0],
+                init_times[-1],
                 id="nwp-dropdown-init-time",
                 style={"width": "100%"},
             ),
