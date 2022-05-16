@@ -11,7 +11,7 @@ def download_satellite_data(
 ):
     """Get download data"""
 
-    logger.info(f"Downloading nwp data. {replace=} {local_filename=}")
+    logger.info(f"Downloading satellite data. {replace=} {local_filename=}")
 
     filename = os.getenv("SATELLITE_AWS_FILENAME", "./satellite_latest.zarr.zip")
 
