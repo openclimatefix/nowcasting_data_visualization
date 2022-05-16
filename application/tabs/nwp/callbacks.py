@@ -25,7 +25,9 @@ def nwp_make_callbacks(app):
         return f"Last refreshed at {now_text}"
 
     @app.callback(
-        [Output("nwp-dropdown-init-time", "options"), Output("nwp-dropdown-variables", "options")],
+        [Output("nwp-dropdown-init-time", "options"),
+         Output("nwp-dropdown-init-time", "value"),
+         Output("nwp-dropdown-variables", "options"), ],
         Input("nwp-refresh-status", "children"),
     )
     def make_nwp_drop_downs(refresh_time):
@@ -41,7 +43,7 @@ def nwp_make_callbacks(app):
         logger.debug(f"Variables are {variables}")
         logger.debug(f"init_times are {init_times}")
 
-        return init_times, variables
+        return init_times, init_times[-1], variables
 
     @app.callback(
         Output("nwp-plot", "figure"),
