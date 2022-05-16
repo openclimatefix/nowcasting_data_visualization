@@ -10,10 +10,10 @@ from tabs.nwp.callbacks import nwp_make_callbacks
 from tabs.nwp.layout import nwp_make_layout
 from tabs.pv.callbacks import pv_make_callbacks
 from tabs.pv.layout import pv_make_layout
+from tabs.satellite.callbacks import satellite_make_callbacks
+from tabs.satellite.layout import satellite_make_layout
 from tabs.status.callbacks import make_status_callbacks
 from tabs.status.layout import make_status_layout
-from tabs.satellite.layout import satellite_make_layout
-from tabs.satellite.callbacks import satellite_make_callbacks
 from tabs.summary.callbacks import make_callbacks
 from tabs.summary.layout import make_layout
 

@@ -14,7 +14,9 @@ from .plots import plot_satellite_data
 def satellite_make_callbacks(app):
     """Make callbacks"""
 
-    @app.callback(Output("satellite-refresh-status", "children"), Input("satellite-refresh", "n_clicks"))
+    @app.callback(
+        Output("satellite-refresh-status", "children"), Input("satellite-refresh", "n_clicks")
+    )
     def refresh_trigger(n_clicks):
 
         logger.debug(f"Downloading data {n_clicks=}")

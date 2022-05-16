@@ -1,12 +1,12 @@
 """ Setup for pytests """
 import os
-import zarr
 import tempfile
 from datetime import datetime, timedelta
 
 import numpy as np
 import pytest
 import xarray as xr
+import zarr
 from nowcasting_datamodel.connection import DatabaseConnection
 from nowcasting_datamodel.fake import make_fake_forecast, make_fake_national_forecast
 from nowcasting_datamodel.models.base import Base_Forecast, Base_PV

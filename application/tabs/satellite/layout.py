@@ -33,7 +33,9 @@ async def satellite_make_layout():
             html.Div(""),
             dbc.Button("Refresh", id="satellite-refresh"),
             dcc.Loading(
-                id="satellite-refresh-status", type="default", children=html.Div(id="loading-output-1")
+                id="satellite-refresh-status",
+                type="default",
+                children=html.Div(id="loading-output-1"),
             ),
         ]
     )
