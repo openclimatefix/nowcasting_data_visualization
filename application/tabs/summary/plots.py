@@ -5,8 +5,8 @@ from datetime import datetime, timezone
 from typing import Optional, Union
 
 import geopandas as gpd
-import pandas as pd
 import numpy as np
+import pandas as pd
 import requests
 from log import logger
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
@@ -150,7 +150,7 @@ def gat_map_data(boundaries: Optional = None):
     return d
 
 
-def make_map_plot(boundaries: Optional = None,d: Optional[dict] = None):
+def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
     """Makes a list of map plot of forecast"""
 
     if d is None:
@@ -187,7 +187,9 @@ def make_map_plot(boundaries: Optional = None,d: Optional[dict] = None):
             )
             predictions_normalized_df.fillna(0, inplace=True)
 
-            predictions_df = predictions_df.join(predictions_normalized_df, on="gsp_id", rsuffix="_n")
+            predictions_df = predictions_df.join(
+                predictions_normalized_df, on="gsp_id", rsuffix="_n"
+            )
 
             boundaries_and_results = boundaries.join(predictions_df, on=["gsp_id"], rsuffix="_r")
 
@@ -247,8 +249,8 @@ def make_map_plot(boundaries: Optional = None,d: Optional[dict] = None):
         figs.append(fig)
 
     # reshape in [normalize, times]
-    logger.debug(f'Made {len(figs)} figures')
-    figs = np.array([figs[0:len(times)], figs[len(times):]])
+    logger.debug(f"Made {len(figs)} figures")
+    figs = np.array([figs[0 : len(times)], figs[len(times) :]])
 
     logger.debug("Done making map plot")
     logger.debug(figs.shape)

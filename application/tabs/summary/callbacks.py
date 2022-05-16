@@ -5,7 +5,7 @@ from typing import List
 from dash import Input, Output, State
 from log import logger
 
-from .plots import make_map_plot, make_plots, gat_map_data
+from .plots import gat_map_data, make_map_plot, make_plots
 
 
 def make_callbacks(app):
@@ -22,7 +22,7 @@ def make_callbacks(app):
             }
         """,
         Output("plot-map", "figure"),
-        [Input("summary-slider-update", "n_intervals"),Input("radio-summary-normalize", "value")],
+        [Input("summary-slider-update", "n_intervals"), Input("radio-summary-normalize", "value")],
         State("store-map-national", "data"),
     )
 
@@ -76,11 +76,11 @@ def make_callbacks(app):
         Input("store-summary-plot-map-data", "data"),
         State("store-gsp-boundaries", "data"),
     )
-    def callback_make_map_plot(map_data,normalize, boundaries):
+    def callback_make_map_plot(map_data, normalize, boundaries):
 
-        logger.debug(f'Making map plot from map data and {normalize=}')
+        logger.debug(f"Making map plot from map data and {normalize=}")
         normalize = bool(int(normalize))
 
-        return make_map_plot(boundaries=boundaries,d=map_data)
+        return make_map_plot(boundaries=boundaries, d=map_data)
 
     return app
