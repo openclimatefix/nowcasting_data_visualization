@@ -61,18 +61,20 @@ def make_callbacks(app):
 
     @app.callback(
         Output("plot-modal", "figure"),
-        Input("plot-map", "clickData"),
+        [Input("plot-map", "clickData"), Input("tick-show-yesterday", "value")]
     )
-    def toggle_modal(click_data):
+    def toggle_modal(click_data, yesterday_value):
         """Call back for pop up GSP graph
 
         If nothin has been clicked then, default is gspPd of 1
         """
+        show_yesterday = True if "Yesterday" in yesterday_value else False
+
         if click_data is None:
             gsp_id = 1
         else:
             gsp_id = int(click_data["points"][0]["pointNumber"] + 1)
-        fig = make_plots(gsp_id=gsp_id, show_yesterday=False)
+        fig = make_plots(gsp_id=gsp_id, show_yesterday=show_yesterday)
 
         return fig
 
