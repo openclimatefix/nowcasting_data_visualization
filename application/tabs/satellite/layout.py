@@ -3,7 +3,6 @@
 import asyncio
 
 import dash_bootstrap_components as dbc
-import pandas as pd
 import xarray as xr
 from dash import dcc, html
 

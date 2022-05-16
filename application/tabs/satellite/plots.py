@@ -1,6 +1,5 @@
 """ Make nwp plots """
 
-from datetime import datetime
 from typing import List, Optional
 
 import pandas as pd
