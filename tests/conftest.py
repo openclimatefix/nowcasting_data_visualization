@@ -1,5 +1,6 @@
 """ Setup for pytests """
 import os
+import zarr
 import tempfile
 from datetime import datetime, timedelta
 
@@ -162,5 +163,51 @@ def nwp_data_filename():
         nwp = nwp.to_dataset(name="UKV")
 
         nwp.to_netcdf(t.name, engine="h5netcdf", mode="w")
+
+        yield t.name
+
+
+@pytest.fixture
+def satellite_data_filename():
+    """Make fake satellite data"""
+    with tempfile.NamedTemporaryFile(suffix=".zarr.zip") as t:
+        os.environ["SATELLITE_AWS_FILENAME"] = t.name
+
+        # middle of the UK
+        t0_datetime_utc = datetime(2022, 1, 1)
+        image_size = 1000
+        time_steps = 10
+
+        ONE_KILOMETER = 10**3
+
+        # 4 kilometer spacing seemed about right for real satellite images
+        x = 2 * ONE_KILOMETER * np.array((range(0, image_size)))
+        y = 2 * ONE_KILOMETER * np.array((range(image_size, 0, -1)))
+
+        # time = pd.date_range(start=t0_datetime_utc, freq="30T", periods=10)
+        time = [t0_datetime_utc + timedelta(minutes=60 * i) for i in range(0, time_steps)]
+
+        coords = (
+            ("time", time),
+            ("variable", np.array(["IR_016"])),
+            ("x", x),
+            ("y", y),
+        )
+
+        sat = xr.DataArray(
+            abs(  # to make sure average is about 100
+                np.random.uniform(
+                    0,
+                    200,
+                    size=(time_steps, 1, image_size, image_size),
+                )
+            ),
+            coords=coords,
+            name="data",
+        )  # Fake data for testing!
+        sat = sat.to_dataset()
+
+        with zarr.ZipStore(t.name) as store:
+            sat.to_zarr(store, compute=True, mode="w")
 
         yield t.name
