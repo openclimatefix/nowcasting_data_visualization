@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 from dash import Input, Output, State
+
 from log import logger
 
 from .plots import make_pv_plot

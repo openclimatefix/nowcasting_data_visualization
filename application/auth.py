@@ -8,6 +8,7 @@ https://hackersandslackers.com/plotly-dash-with-flask/
 import os
 
 import dash_auth
+
 from log import logger
 
 VALID_USERNAME_PASSWORD_PAIRS = {os.getenv("USERNAME", "hello"): os.getenv("WORD", "world")}

@@ -6,8 +6,9 @@ import dash_bootstrap_components as dbc
 import xarray as xr
 from dash import dcc, html
 
-from .download import download_satellite_data
 from log import logger
+
+from .download import download_satellite_data
 
 
 async def satellite_make_layout():
@@ -65,6 +66,6 @@ async def satellite_make_layout():
 
     except Exception as e:
         logger.error(e)
-        raise Exception('Could not make satellite page')
+        raise Exception("Could not make satellite page")
 
     return tab2
