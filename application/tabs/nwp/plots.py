@@ -75,6 +75,9 @@ def plot_nwp_data(init_time, variable, filename: Optional[str] = "./nwp_latest.n
     zmin = float(nwp_xr.min())
 
     # TODO
+    # flip horizontally
+
+    # TODO
     # reproject to lat lon and put on coastline
 
     logger.debug("Making nwp traces for animation")
