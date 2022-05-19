@@ -64,48 +64,52 @@ def plot_satellite_data(variable, filename: Optional[str] = "./satellite_latest.
 
     logger.debug(f"Plotting data {filename=}, {variable=}")
     print(filename)
-    satellite_xr = xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr")
+    with xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr") as satellite_xr:
 
-    satellite_xr = satellite_xr.sel(variable=variable)
-    satellite_xr = satellite_xr.data
 
-    zmax = float(satellite_xr.max())
-    zmin = float(satellite_xr.min())
+        satellite_xr = satellite_xr.sel(variable=variable)
+        satellite_xr = satellite_xr.data
 
-    # TODO
-    # reproject to lat lon and put on coastline
+        zmax = float(satellite_xr.max())
+        zmin = float(satellite_xr.min())
 
-    logger.debug("Making satellite traces for animation")
-    traces = []
-    labels = []
-    for i in range(len(satellite_xr.time)):
-        traces.append(go.Heatmap(z=satellite_xr[i].values, zmin=zmin, zmax=zmax))
-        # do we need pandas here?
-        step = pd.to_datetime(satellite_xr.time[i].values)
-        labels.append(step)
+        # flip horizontally
+        satellite_xr = satellite_xr.reindex(x_geostationary=satellite_xr.x_geostationary[::-1])
 
-    # make animation
-    logger.debug("Making satellite figure")
-    fig = go.Figure(
-        data=traces[0],
-        layout=go.Layout(
-            title=f"Start Title - {variable}",
-        ),
-    )
+        # TODO
+        # reproject to lat lon and put on coastline
 
-    frames = []
-    for i, trace in enumerate(traces):
-        frames.append(go.Frame(data=trace, name=f"frame{i + 1}"))
+        logger.debug("Making satellite traces for animation")
+        traces = []
+        labels = []
+        for i in range(len(satellite_xr.time)):
+            traces.append(go.Heatmap(z=satellite_xr[i].values, zmin=zmin, zmax=zmax))
+            # do we need pandas here?
+            step = pd.to_datetime(satellite_xr.time[i].values)
+            labels.append(step)
 
-    fig.update(frames=frames)
-    fig.update_layout(updatemenus=[make_buttons()])
+        # make animation
+        logger.debug("Making satellite figure")
+        fig = go.Figure(
+            data=traces[0],
+            layout=go.Layout(
+                title=f"Start Title - {variable}",
+            ),
+        )
 
-    sliders = make_slider(labels=labels)
-    fig.update_layout(sliders=sliders)
-    fig.update_layout(
-        margin={"r": 0, "t": 30, "l": 0, "b": 30},
-        height=700,
-    )
+        frames = []
+        for i, trace in enumerate(traces):
+            frames.append(go.Frame(data=trace, name=f"frame{i + 1}"))
 
-    logger.debug("Done making satellite plot")
+        fig.update(frames=frames)
+        fig.update_layout(updatemenus=[make_buttons()])
+
+        sliders = make_slider(labels=labels)
+        fig.update_layout(sliders=sliders)
+        fig.update_layout(
+            margin={"r": 0, "t": 30, "l": 0, "b": 30},
+            height=700,
+        )
+
+        logger.debug("Done making satellite plot")
     return fig

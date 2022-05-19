@@ -17,10 +17,9 @@ async def nwp_make_layout():
 
     download_data()
 
-    nwp_xr = xr.load_dataset("nwp_latest.netcdf")["UKV"]
-
-    variables = nwp_xr["variable"].values
-    init_times = nwp_xr.init_time.values
+    with xr.load_dataset("nwp_latest.netcdf")["UKV"] as nwp_xr:
+        variables = nwp_xr["variable"].values
+        init_times = nwp_xr.init_time.values
 
     # do we need pandas for this?
     init_times = [pd.to_datetime(init_time).isoformat() for init_time in init_times]

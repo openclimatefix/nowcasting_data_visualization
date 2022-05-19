@@ -19,9 +19,8 @@ async def satellite_make_layout():
 
         download_satellite_data()
 
-        satellite_xr = xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr")
-
-        variables = satellite_xr["variable"].values
+        with xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr") as satellite_xr:
+            variables = satellite_xr["variable"].values.tolist()
 
         drop_downs = html.Div(
             [
