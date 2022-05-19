@@ -66,7 +66,6 @@ def plot_satellite_data(variable, filename: Optional[str] = "./satellite_latest.
     print(filename)
     with xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr") as satellite_xr:
 
-
         satellite_xr = satellite_xr.sel(variable=variable)
         satellite_xr = satellite_xr.data
 
