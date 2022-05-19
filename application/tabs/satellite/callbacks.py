@@ -36,9 +36,10 @@ def satellite_make_callbacks(app):
         logger.debug(f"Making satellite drop downs for {refresh_time=}")
 
         satellite_xr = xr.open_dataset("zip::satellite_latest.zarr.zip", engine="zarr")
-        variables = satellite_xr["variable"].values
+        variables = satellite_xr["variable"].values.tolist()
 
         logger.debug(f"Variables are {variables}")
+        del satellite_xr
 
         logger.debug(f"Making satellite drop downs for {refresh_time=}: done")
 

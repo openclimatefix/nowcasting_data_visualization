@@ -5,9 +5,9 @@ import asyncio
 import dash_bootstrap_components as dbc
 import xarray as xr
 from dash import dcc, html
+from log import logger
 
 from .download import download_satellite_data
-from log import logger
 
 
 async def satellite_make_layout():
@@ -19,9 +19,8 @@ async def satellite_make_layout():
 
         download_satellite_data()
 
-        satellite_xr = xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr")
-
-        variables = satellite_xr["variable"].values
+        with xr.load_dataset("zip::satellite_latest.zarr.zip", engine="zarr") as satellite_xr:
+            variables = satellite_xr["variable"].values.tolist()
 
         drop_downs = html.Div(
             [
@@ -65,6 +64,6 @@ async def satellite_make_layout():
 
     except Exception as e:
         logger.error(e)
-        raise Exception('Could not make satellite page')
+        raise Exception("Could not make satellite page")
 
     return tab2

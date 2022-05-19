@@ -190,8 +190,10 @@ def satellite_data_filename():
         coords = (
             ("time", time),
             ("variable", np.array(["IR_016"])),
-            ("x", x),
-            ("y", y),
+            ("x_geostationary", x),
+            ("y_geostationary", y),
+            # ("x_osgb", x),
+            # ("y_osgb", y),
         )
 
         sat = xr.DataArray(
