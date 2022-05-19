@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 from typing import List
 
 from dash import Input, Output, State
-
 from log import logger
 
 from .plots import gat_map_data, make_map_plot, make_plots

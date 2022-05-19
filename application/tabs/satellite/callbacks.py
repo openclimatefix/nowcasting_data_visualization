@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 
 import xarray as xr
 from dash import Input, Output
-
 from log import logger
 
 from .download import download_satellite_data

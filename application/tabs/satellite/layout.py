@@ -5,7 +5,6 @@ import asyncio
 import dash_bootstrap_components as dbc
 import xarray as xr
 from dash import dcc, html
-
 from log import logger
 
 from .download import download_satellite_data

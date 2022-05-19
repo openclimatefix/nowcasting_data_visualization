@@ -4,9 +4,8 @@ from typing import List, Optional
 
 import pandas as pd
 import xarray as xr
-from plotly import graph_objects as go
-
 from log import logger
+from plotly import graph_objects as go
 
 
 def make_slider(labels: List[str]) -> dict:

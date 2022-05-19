@@ -3,9 +3,8 @@
 import asyncio
 
 import dash_bootstrap_components as dbc
-from dash import Dash, dcc, html
-
 from auth import make_auth
+from dash import Dash, dcc, html
 from log import logger
 from tabs.nwp.callbacks import nwp_make_callbacks
 from tabs.nwp.layout import nwp_make_layout
