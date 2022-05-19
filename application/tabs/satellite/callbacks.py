@@ -40,6 +40,7 @@ def satellite_make_callbacks(app):
         variables = satellite_xr["variable"].values.tolist()
 
         logger.debug(f"Variables are {variables}")
+        del satellite_xr
 
         logger.debug(f"Making satellite drop downs for {refresh_time=}: done")
 
