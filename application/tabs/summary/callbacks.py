@@ -14,7 +14,7 @@ def make_callbacks(app):
     app.clientside_callback(
         """
         function(n_intervals, normalize, data) {
-            let N = data.length
+            let N = data[0].length
             let n_index = parseInt(normalize)
             i = n_intervals % N
             console.log(i,n_index)
