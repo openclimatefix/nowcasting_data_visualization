@@ -57,11 +57,40 @@ def make_app():
             make_all_tabs_layout()
         )
     else:
-        tab_sat = satellite_make_layout()
-        tab_summary = make_layout()
-        tab_pv = pv_make_layout()
-        tab_status = make_status_layout()
-        tab_nwp = nwp_make_layout()
+        try:
+            tab_sat = satellite_make_layout()
+        except Exception as e:
+            logger.error(e)
+            logger.debug('Could not make satellite tab')
+            tab_sat = None
+
+        try:
+            tab_summary = make_layout()
+        except Exception as e:
+            logger.error(e)
+            logger.debug('Could not make summary tab')
+            tab_summary = None
+
+        try:
+            tab_pv = pv_make_layout()
+        except Exception as e:
+            logger.error(e)
+            logger.debug('Could not make pv tab')
+            tab_pv = None
+
+        try:
+            tab_status = make_status_layout()
+        except Exception as e:
+            logger.error(e)
+            logger.debug('Could not make status tab')
+            tab_status = None
+
+        try:
+            tab_nwp = nwp_make_layout()
+        except Exception as e:
+            logger.error(e)
+            logger.debug('Could not make nwp tab')
+            tab_nwp = None
         
     app.layout = html.Div(
         children=[
