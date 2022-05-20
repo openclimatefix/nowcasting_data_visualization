@@ -50,10 +50,19 @@ def make_app():
         res = await asyncio.gather(*tasks)
         return res
 
-    tab_sat, tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(
-        make_all_tabs_layout()
-    )
+    use_async = False
+    if use_async:
 
+        tab_sat, tab_summary, tab_pv, tab_status, tab_nwp = asyncio.get_event_loop().run_until_complete(
+            make_all_tabs_layout()
+        )
+    else:
+        tab_sat = satellite_make_layout()
+        tab_summary = make_layout()
+        tab_pv = pv_make_layout()
+        tab_status = make_status_layout()
+        tab_nwp = nwp_make_layout()
+        
     app.layout = html.Div(
         children=[
             html.H1(children="Data visualization dashboard"),
