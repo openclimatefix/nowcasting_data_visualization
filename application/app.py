@@ -96,7 +96,6 @@ def make_app():
 
         try:
             logger.debug('Adding NWP tab')
-            # tab_nwp = None
             tab_nwp = asyncio.run(nwp_make_layout())
         except Exception as e:
             logger.error(e)
