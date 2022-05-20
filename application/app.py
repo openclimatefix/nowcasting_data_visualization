@@ -61,40 +61,49 @@ def make_app():
             tab_nwp,
         ) = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
     else:
+        logger.debug('Adding tabs')
         try:
-            tab_sat = satellite_make_layout()
+            logger.debug('Adding Satellite tab')
+            tab_sat = asyncio.run(satellite_make_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make satellite tab")
             tab_sat = None
 
         try:
-            tab_summary = make_layout()
+            logger.debug('Adding Summary tab')
+            tab_summary = asyncio.run(make_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make summary tab")
             tab_summary = None
 
         try:
-            tab_pv = pv_make_layout()
+            logger.debug('Adding PV tab')
+            tab_pv = asyncio.run(pv_make_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make pv tab")
             tab_pv = None
 
         try:
-            tab_status = make_status_layout()
+            logger.debug('Adding Status tab')
+            tab_status = asyncio.run(make_status_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make status tab")
             tab_status = None
 
         try:
-            tab_nwp = nwp_make_layout()
+            logger.debug('Adding NWP tab')
+            # tab_nwp = None
+            tab_nwp = asyncio.run(nwp_make_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make nwp tab")
             tab_nwp = None
+
+    logger.debug('Done adding tabs')
 
     app.layout = html.Div(
         children=[
@@ -116,15 +125,17 @@ def make_app():
     )
 
     # add other tab callbacks
+    logger.debug('Adding Callbacks')
     app = make_callbacks(app)
     app = pv_make_callbacks(app)
     app = make_status_callbacks(app)
     app = nwp_make_callbacks(app)
     app = satellite_make_callbacks(app)
+    logger.debug('Done adding Callbacks')
 
     return app
 
 
 if __name__ == "__main__":
     app = make_app()
-    app.run_server(debug=True, port=8000, host="0.0.0.0", use_reloader=False)
+    app.run_server(debug=True, port=8000, host="0.0.0.0")
