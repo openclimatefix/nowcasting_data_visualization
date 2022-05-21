@@ -21,6 +21,7 @@ async def pv_make_layout():
     tab2 = html.Div(
         [
             html.H3("PV data from today"),
+            dcc.Checklist(["Normalize"], [""], id="pv-tick-normalize"),
             dcc.Dropdown(
                 all_pv_systems_ids,
                 init_pv_systems,
