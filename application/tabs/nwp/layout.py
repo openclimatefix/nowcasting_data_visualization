@@ -17,7 +17,7 @@ async def nwp_make_layout():
 
     download_data()
 
-    with xr.load_dataset("nwp_latest.netcdf")["UKV"] as nwp_xr:
+    with xr.open_dataset("nwp_latest.netcdf")["UKV"] as nwp_xr:
         variables = nwp_xr["variable"].values
         init_times = nwp_xr.init_time.values
 
