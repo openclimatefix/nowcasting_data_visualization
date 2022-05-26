@@ -20,6 +20,7 @@ def download_satellite_data(
         logger.debug(f"Downloading satellite data {filename}")
         print(f"Downloading satellite data {filename}")
         fs = fsspec.open(filename).fs
+        fs.rm(local_filename)
         fs.get(filename, local_filename)
         logger.debug(f"Downloading satellite data {filename}: done")
     else:

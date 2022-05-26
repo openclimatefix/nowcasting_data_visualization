@@ -25,6 +25,9 @@ def get_gsp_boundaries() -> json:
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
 
+    # simplify geometyr to roughly every 100meter
+    boundaries["geometry"] = boundaries.geometry.simplify(360/432000)
+
     return boundaries.to_json()
 
 
