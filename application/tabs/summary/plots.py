@@ -12,7 +12,7 @@ from log import logger
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
 
-from application.tabs.plot_utils import make_slider, make_buttons
+from application.tabs.plot_utils import make_buttons, make_slider
 
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
@@ -28,7 +28,7 @@ def get_gsp_boundaries() -> json:
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
 
     # simplify geometry to roughly every 100 meters
-    boundaries["geometry"] = boundaries.geometry.simplify(360/432000)
+    boundaries["geometry"] = boundaries.geometry.simplify(360 / 432000)
 
     return boundaries.to_json()
 
@@ -249,7 +249,6 @@ def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
         sliders = make_slider(labels=labels)
         fig.update_layout(sliders=sliders)
         fig.update_layout(updatemenus=[make_buttons()])
-
 
         # fig.layout['sliders'][0]['active'] = 1
 
