@@ -1,10 +1,10 @@
 """ Main app file """
 
 import asyncio
-import psutil
 import os
 
 import dash_bootstrap_components as dbc
+import psutil
 from auth import make_auth
 from dash import Dash, dcc, html
 from log import logger
