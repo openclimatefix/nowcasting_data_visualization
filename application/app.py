@@ -132,6 +132,10 @@ def make_app():
     app = satellite_make_callbacks(app)
     logger.debug('Done adding Callbacks')
 
+    # print memoery
+    process = psutil.Process(os.getpid())
+    logger.debug(f"Memory is {process.memory_info().rss / 10 ** 6} MB")
+
     return app
 
 

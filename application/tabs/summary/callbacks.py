@@ -11,20 +11,21 @@ from .plots import gat_map_data, make_map_plot, make_plots
 def make_callbacks(app):
     """Make callbacks"""
 
-    app.clientside_callback(
-        """
-        function(n_intervals, normalize, data) {
-            let N = data[0].length
-            let n_index = parseInt(normalize)
-            i = n_intervals % N
-            console.log(i,n_index)
-            return data[n_index][i]
-            }
-        """,
+    @app.callback(
         Output("plot-map", "figure"),
-        [Input("summary-slider-update", "n_intervals"), Input("radio-summary-normalize", "value")],
+        [Input("radio-summary-normalize", "value")],
         State("store-map-national", "data"),
     )
+    def update_frame(normalize, data):
+
+        n_index = int(normalize)
+        logger.debug(f'Updating frame, {normalize}, {len(data)}')
+        fig = data[n_index]
+
+        logger.debug(fig['layout']['title'])
+
+        return fig
+
 
     # refresh data and national plot
     @app.callback(
