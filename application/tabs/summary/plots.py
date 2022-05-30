@@ -5,12 +5,13 @@ from datetime import datetime, timezone
 from typing import Optional, Union
 
 import geopandas as gpd
-import numpy as np
 import pandas as pd
 import requests
 from log import logger
 from nowcasting_datamodel.models import ForecastValue, GSPYield, ManyForecasts
 from plotly import graph_objects as go
+
+from application.tabs.plot_utils import make_buttons, make_slider
 
 API_URL = os.getenv("API_URL")
 assert API_URL is not None, "API_URL has not been set"
@@ -25,7 +26,7 @@ def get_gsp_boundaries() -> json:
     d = r.json()
     boundaries = gpd.GeoDataFrame.from_features(d["features"])
 
-    # simplify geometyr to roughly every 100meter
+    # simplify geometry to roughly every 100 meters
     boundaries["geometry"] = boundaries.geometry.simplify(360 / 432000)
 
     return boundaries.to_json()
@@ -173,8 +174,9 @@ def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
     times = [
         forecast_value.target_time for forecast_value in forecasts.forecasts[1].forecast_values
     ]
-    traces = []
+    figs = []
     for normalize in [False, True]:
+        traces = []
         for i in range(len(times)):
             predictions = {
                 f.location.gsp_id: f.forecast_values[i].expected_power_generation_megawatts
@@ -234,9 +236,20 @@ def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
                 )
             )
 
-    figs = []
-    for i in range(len(traces)):
-        fig = go.Figure(data=traces[i])
+        frames = []
+        labels = []
+        for i, trace in enumerate(traces):
+            frames.append(go.Frame(data=trace, name=f"frame{i + 1}"))
+            labels.append(str(times[i]))
+
+        fig = go.Figure(data=traces[0], frames=frames)
+        # might need to add slider first
+
+        sliders = make_slider(labels=labels)
+        fig.update_layout(sliders=sliders)
+        fig.update_layout(updatemenus=[make_buttons()])
+
+        # fig.layout['sliders'][0]['active'] = 1
 
         fig.update_layout(
             mapbox_style="carto-positron",
@@ -247,16 +260,18 @@ def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
             margin={"r": 0, "t": 30, "l": 0, "b": 30},
             height=700,
         )
-        fig.update_layout(title=f"Solar Generation [MW]: {times[i % len(times)].isoformat()}")
+        # fig.update_layout(title=f"Solar Generation [MW]: {times[i % len(times)].isoformat()}")
+        if normalize:
+            fig.update_layout(title="Solar Generation [%]")
+        else:
+            fig.update_layout(title="Solar Generation [MW]")
 
+        # reshape in [normalize, times]
+        # logger.debug(f"Made {len(figs)} figures")
+        # figs = np.array([figs[0 : len(times)], figs[len(times) :]])
+
+        logger.debug(f"Done making map plot {normalize=}")
         figs.append(fig)
-
-    # reshape in [normalize, times]
-    logger.debug(f"Made {len(figs)} figures")
-    figs = np.array([figs[0 : len(times)], figs[len(times) :]])
-
-    logger.debug("Done making map plot")
-    logger.debug(figs.shape)
 
     return figs
 

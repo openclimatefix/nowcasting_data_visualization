@@ -1,8 +1,10 @@
 """ Main app file """
 
 import asyncio
+import os
 
 import dash_bootstrap_components as dbc
+import psutil
 from auth import make_auth
 from dash import Dash, dcc, html
 from log import logger
@@ -21,7 +23,7 @@ from tabs.summary.layout import make_layout
 # logger.setLevel(getattr(logging, os.environ.get("LOG_LEVEL", "DEBUG")))
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
-version = "1.0.0"
+version = "1.0.2"
 logger.debug(f"Running {version} of Data visulization ")
 print(version)
 
@@ -131,6 +133,11 @@ def make_app():
     app = nwp_make_callbacks(app)
     app = satellite_make_callbacks(app)
     logger.debug("Done adding Callbacks")
+
+    # print memoery
+    process = psutil.Process(os.getpid())
+    logger.debug(f"Memory is {process.memory_info().rss / 10 ** 6} MB")
+
 
     return app
 
