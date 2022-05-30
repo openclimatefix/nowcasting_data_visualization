@@ -1,3 +1,4 @@
+""" Functions to make slider and buttons for plot """
 from typing import List
 
 
