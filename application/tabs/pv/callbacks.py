@@ -13,14 +13,13 @@ def pv_make_callbacks(app):
 
     @app.callback(
         Output("pv-plot", "figure"),
-        [Input("pv-dropdown", "value"),
-         Input("pv-tick-normalize", "value")]
+        [Input("pv-dropdown", "value"), Input("pv-tick-normalize", "value")],
     )
     def update_pv_plot(pv_system_id: List[int], normalize_tick_box):
 
         logger.info(f"Updating PV plot with pv system {pv_system_id} ({normalize_tick_box})")
 
-        normalize = True if 'Normalize' in normalize_tick_box else False
+        normalize = True if "Normalize" in normalize_tick_box else False
 
         fig = make_pv_plot(pv_systems_ids=pv_system_id, normalize=normalize)
         logger.debug("Updating PV plot: done")

@@ -27,10 +27,10 @@ def get_all_pv_systems_ids() -> List[int]:
     return pv_system_ids
 
 
-def make_pv_plot(pv_systems_ids: Optional[List[int]] = None, normalize:bool = False):
+def make_pv_plot(pv_systems_ids: Optional[List[int]] = None, normalize: bool = False):
     """Make PV plot"""
 
-    logger.info(f'Making PV plot for {pv_systems_ids=} and {normalize=}')
+    logger.info(f"Making PV plot for {pv_systems_ids=} and {normalize=}")
 
     # make database connection
     url = os.getenv("DB_URL_PV")
@@ -49,20 +49,22 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None, normalize:bool = Fa
 
     if normalize:
         # TODO move this to model
-        logger.debug('Normalizing data')
+        logger.debug("Normalizing data")
         pv_yields_dict = []
         for pv_yield in pv_yields:
-            solar_generation_normalized = 100*pv_yield.solar_generation_kw / pv_yield.pv_system.installed_capacity_kw
+            solar_generation_normalized = (
+                100 * pv_yield.solar_generation_kw / pv_yield.pv_system.installed_capacity_kw
+            )
             pv_yield_dict = pv_yield.__dict__
-            pv_yield_dict['solar_generation_normalized'] = solar_generation_normalized
+            pv_yield_dict["solar_generation_normalized"] = solar_generation_normalized
             pv_yields_dict.append(pv_yield_dict)
 
-        variable = 'solar_generation_normalized'
+        variable = "solar_generation_normalized"
     else:
         pv_yields_dict = [pv_yield.__dict__ for pv_yield in pv_yields]
-        variable = 'solar_generation_kw'
+        variable = "solar_generation_kw"
 
-        logger.debug('Normalizing data: done')
+        logger.debug("Normalizing data: done")
 
     pv_yields_df = pd.DataFrame(pv_yields_dict)
 
@@ -85,9 +87,7 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None, normalize:bool = Fa
     pv_yields_df.drop_duplicates(
         ["datetime_utc", "pv_system_id", variable], keep="last", inplace=True
     )
-    pv_yields_df = pv_yields_df.pivot(
-        index="datetime_utc", columns="pv_system_id", values=variable
-    )
+    pv_yields_df = pv_yields_df.pivot(index="datetime_utc", columns="pv_system_id", values=variable)
 
     print(pv_yields_df.columns)
 
