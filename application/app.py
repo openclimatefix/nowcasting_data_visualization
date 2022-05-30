@@ -138,7 +138,6 @@ def make_app():
     process = psutil.Process(os.getpid())
     logger.debug(f"Memory is {process.memory_info().rss / 10 ** 6} MB")
 
-
     return app
 
 
