@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from typing import Optional, Union
 
 import geopandas as gpd
-import numpy as np
 import pandas as pd
 import requests
 from log import logger
@@ -263,9 +262,9 @@ def make_map_plot(boundaries: Optional = None, d: Optional[dict] = None):
         )
         # fig.update_layout(title=f"Solar Generation [MW]: {times[i % len(times)].isoformat()}")
         if normalize:
-            fig.update_layout(title=f"Solar Generation [%]")
+            fig.update_layout(title="Solar Generation [%]")
         else:
-            fig.update_layout(title=f"Solar Generation [MW]")
+            fig.update_layout(title="Solar Generation [MW]")
 
         # reshape in [normalize, times]
         # logger.debug(f"Made {len(figs)} figures")
