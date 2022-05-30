@@ -13,5 +13,5 @@ h5netcdf
 s3fs
 fsspec
 pathy
-nowcasting_datamodel==0.0.56
+nowcasting_datamodel==1.0.7
 zarr
