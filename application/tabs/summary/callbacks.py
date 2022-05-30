@@ -19,13 +19,12 @@ def make_callbacks(app):
     def update_frame(normalize, data):
 
         n_index = int(normalize)
-        logger.debug(f'Updating frame, {normalize}, {len(data)}')
+        logger.debug(f"Updating frame, {normalize}, {len(data)}")
         fig = data[n_index]
 
-        logger.debug(fig['layout']['title'])
+        logger.debug(fig["layout"]["title"])
 
         return fig
-
 
     # refresh data and national plot
     @app.callback(

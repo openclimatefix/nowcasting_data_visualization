@@ -7,7 +7,7 @@ import xarray as xr
 from log import logger
 from plotly import graph_objects as go
 
-from application.tabs.plot_utils import make_slider, make_buttons
+from application.tabs.plot_utils import make_buttons, make_slider
 
 
 def plot_satellite_data(variable, filename: Optional[str] = "./satellite_latest.netcdf"):
