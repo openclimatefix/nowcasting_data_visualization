@@ -27,8 +27,10 @@ def get_all_pv_systems_ids() -> List[int]:
     return pv_system_ids
 
 
-def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
+def make_pv_plot(pv_systems_ids: Optional[List[int]] = None, normalize: bool = False):
     """Make PV plot"""
+
+    logger.info(f"Making PV plot for {pv_systems_ids=} and {normalize=}")
 
     # make database connection
     url = os.getenv("DB_URL_PV")
@@ -43,9 +45,28 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
             session=session, start_utc=start_utc, pv_systems_ids=pv_systems_ids
         )
 
-        pv_yields_df = pd.DataFrame(
-            [(PVYield.from_orm(pv_yield)).__dict__ for pv_yield in pv_yields]
-        )
+        pv_yields = [PVYield.from_orm(pv_yield) for pv_yield in pv_yields]
+
+    if normalize:
+        # TODO move this to model
+        logger.debug("Normalizing data")
+        pv_yields_dict = []
+        for pv_yield in pv_yields:
+            solar_generation_normalized = (
+                100 * pv_yield.solar_generation_kw / pv_yield.pv_system.installed_capacity_kw
+            )
+            pv_yield_dict = pv_yield.__dict__
+            pv_yield_dict["solar_generation_normalized"] = solar_generation_normalized
+            pv_yields_dict.append(pv_yield_dict)
+
+        variable = "solar_generation_normalized"
+    else:
+        pv_yields_dict = [pv_yield.__dict__ for pv_yield in pv_yields]
+        variable = "solar_generation_kw"
+
+        logger.debug("Normalizing data: done")
+
+    pv_yields_df = pd.DataFrame(pv_yields_dict)
 
     if len(pv_yields_df) == 0:
         logger.warning("Found no pv yields, this might cause an error")
@@ -62,13 +83,11 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
     )
 
     # pivot on
-    pv_yields_df = pv_yields_df[["datetime_utc", "pv_system_id", "solar_generation_kw"]]
+    pv_yields_df = pv_yields_df[["datetime_utc", "pv_system_id", variable]]
     pv_yields_df.drop_duplicates(
-        ["datetime_utc", "pv_system_id", "solar_generation_kw"], keep="last", inplace=True
+        ["datetime_utc", "pv_system_id", variable], keep="last", inplace=True
     )
-    pv_yields_df = pv_yields_df.pivot(
-        index="datetime_utc", columns="pv_system_id", values="solar_generation_kw"
-    )
+    pv_yields_df = pv_yields_df.pivot(index="datetime_utc", columns="pv_system_id", values=variable)
 
     print(pv_yields_df.columns)
 
@@ -89,5 +108,10 @@ def make_pv_plot(pv_systems_ids: Optional[List[int]] = None):
         xaxis_title="Time [UTC]",
         yaxis_title="Solar generation [kW]",
     )
+
+    if normalize:
+        fig.update_layout(
+            yaxis_title="Solar generation [%]",
+        )
 
     return fig
