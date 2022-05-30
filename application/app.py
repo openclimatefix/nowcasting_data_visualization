@@ -1,8 +1,10 @@
 """ Main app file """
 
 import asyncio
+import os
 
 import dash_bootstrap_components as dbc
+import psutil
 from auth import make_auth
 from dash import Dash, dcc, html
 from log import logger
@@ -61,9 +63,9 @@ def make_app():
             tab_nwp,
         ) = asyncio.get_event_loop().run_until_complete(make_all_tabs_layout())
     else:
-        logger.debug('Adding tabs')
+        logger.debug("Adding tabs")
         try:
-            logger.debug('Adding Satellite tab')
+            logger.debug("Adding Satellite tab")
             tab_sat = asyncio.run(satellite_make_layout())
         except Exception as e:
             logger.error(e)
@@ -71,7 +73,7 @@ def make_app():
             tab_sat = None
 
         try:
-            logger.debug('Adding Summary tab')
+            logger.debug("Adding Summary tab")
             tab_summary = asyncio.run(make_layout())
         except Exception as e:
             logger.error(e)
@@ -79,7 +81,7 @@ def make_app():
             tab_summary = None
 
         try:
-            logger.debug('Adding PV tab')
+            logger.debug("Adding PV tab")
             tab_pv = asyncio.run(pv_make_layout())
         except Exception as e:
             logger.error(e)
@@ -87,7 +89,7 @@ def make_app():
             tab_pv = None
 
         try:
-            logger.debug('Adding Status tab')
+            logger.debug("Adding Status tab")
             tab_status = asyncio.run(make_status_layout())
         except Exception as e:
             logger.error(e)
@@ -95,14 +97,14 @@ def make_app():
             tab_status = None
 
         try:
-            logger.debug('Adding NWP tab')
+            logger.debug("Adding NWP tab")
             tab_nwp = asyncio.run(nwp_make_layout())
         except Exception as e:
             logger.error(e)
             logger.debug("Could not make nwp tab")
             tab_nwp = None
 
-    logger.debug('Done adding tabs')
+    logger.debug("Done adding tabs")
 
     app.layout = html.Div(
         children=[
@@ -124,13 +126,17 @@ def make_app():
     )
 
     # add other tab callbacks
-    logger.debug('Adding Callbacks')
+    logger.debug("Adding Callbacks")
     app = make_callbacks(app)
     app = pv_make_callbacks(app)
     app = make_status_callbacks(app)
     app = nwp_make_callbacks(app)
     app = satellite_make_callbacks(app)
-    logger.debug('Done adding Callbacks')
+    logger.debug("Done adding Callbacks")
+
+    # print memoery
+    process = psutil.Process(os.getpid())
+    logger.debug(f"Memory is {process.memory_info().rss / 10 ** 6} MB")
 
     return app
 
